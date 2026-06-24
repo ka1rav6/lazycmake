@@ -58,10 +58,16 @@ if(LAZYCMAKE_BUILD_TESTS)
     list(APPEND CMAKE_MODULE_PATH "${catch2_SOURCE_DIR}/extras")
 endif()
 
-# Phase 5+ adds FTXUI, toml++, efsw, and reproc here behind
-# LAZYCMAKE_BUILD_TUI, once the TUI layer (docs/DESIGN.md Phase 5) starts.
-# Kept out for now so that Phase 0/1 (Core layer only) has the smallest
-# possible dependency graph and fastest CI iteration.
+if(LAZYCMAKE_BUILD_TUI)
+    FetchContent_Declare(
+        ftxui
+        GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI.git
+        GIT_TAG v5.0.0
+    )
+    FetchContent_MakeAvailable(ftxui)
+endif()
+
+# Phase 6+ adds toml++, efsw, and reproc here behind LAZYCMAKE_BUILD_TUI.
 
 # --- lazycmake_core library ------------------------------------------------
 # Pure domain logic: Project/Target/DependencySpec models, validation,
@@ -124,12 +130,22 @@ file(GLOB_RECURSE LAZYCMAKE_NON_TUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fswatch/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/events/*.cpp
 )
-foreach(_lazycmake_src_file ${LAZYCMAKE_NON_TUI_SOURCES})
-    file(STRINGS ${_lazycmake_src_file} _lazycmake_ftxui_hits REGEX "ftxui/")
+# Also check non-TUI headers in include/ (public API must not depend on FTXUI).
+file(GLOB_RECURSE LAZYCMAKE_NON_TUI_HEADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/lazycmake/core/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/lazycmake/cmake_gen/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/lazycmake/build/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/lazycmake/config/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/lazycmake/plugins/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/lazycmake/events/*.hpp
+)
+foreach(_lazycmake_file ${LAZYCMAKE_NON_TUI_SOURCES} ${LAZYCMAKE_NON_TUI_HEADERS})
+    file(STRINGS ${_lazycmake_file} _lazycmake_ftxui_hits REGEX "ftxui/")
     if(_lazycmake_ftxui_hits)
         message(FATAL_ERROR
-            "FTXUI boundary violation: '${_lazycmake_src_file}' includes an "
-            "ftxui/ header. Only files under src/tui/ may depend on FTXUI "
+            "FTXUI boundary violation: '${_lazycmake_file}' includes an "
+            "ftxui/ header. Only files under src/tui/ or "
+            "include/lazycmake/tui/ may depend on FTXUI "
             "(see docs/DESIGN.md section 4).")
     endif()
 endforeach()
@@ -143,4 +159,59 @@ endif()
 
 if(LAZYCMAKE_BUILD_EXAMPLES)
     add_subdirectory(examples)
+endif()
+
+# --- TUI library & executable (Phase 5+) -----------------------------------
+# docs/DESIGN.md §14: the TUI layer implements the navigable, themeable,
+# rebindable shell. All FTXUI-dependent code lives here.
+
+if(LAZYCMAKE_BUILD_TUI)
+    add_library(lazycmake_tui STATIC
+        src/tui/application.cpp
+        src/tui/color_helper.cpp
+        src/tui/screen.cpp
+        src/tui/startup_screen.cpp
+        src/tui/wizard_screen.cpp
+        src/tui/main_workspace.cpp
+        src/tui/settings_screen.cpp
+        src/tui/help_overlay.cpp
+        src/tui/panels/file_panel.cpp
+        src/tui/panels/target_panel.cpp
+        src/tui/panels/output_panel.cpp
+    )
+
+    target_include_directories(lazycmake_tui
+        PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+    )
+
+    target_link_libraries(lazycmake_tui
+        PUBLIC
+            lazycmake_core
+            ftxui::screen
+            ftxui::dom
+            ftxui::component
+        PRIVATE
+            fmt::fmt
+            spdlog::spdlog
+    )
+
+    target_compile_features(lazycmake_tui PUBLIC cxx_std_20)
+
+    if(MSVC)
+        target_compile_options(lazycmake_tui PRIVATE /W4)
+    else()
+        target_compile_options(lazycmake_tui PRIVATE -Wall -Wextra -Wpedantic)
+    endif()
+
+    add_executable(lazycmake
+        src/tui/main.cpp
+    )
+
+    target_link_libraries(lazycmake
+        PRIVATE
+            lazycmake_tui
+    )
+
+    target_compile_features(lazycmake PUBLIC cxx_std_20)
 endif()
