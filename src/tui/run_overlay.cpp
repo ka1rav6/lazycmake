@@ -1,0 +1,58 @@
+#include "lazycmake/tui/run_overlay.hpp"
+
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
+
+#include "lazycmake/tui/color_helper.hpp"
+
+namespace lazycmake::tui {
+
+RunOverlay::RunOverlay(events::EventBus& bus,
+                       config::KeymapManager& keymap,
+                       config::ThemeManager& theme,
+                       build::RunManager& runManager)
+    : bus_(bus), keymap_(keymap), theme_(theme), runManager_(runManager) {}
+
+ftxui::Component RunOverlay::build() {
+    auto self = this;
+    auto renderer = ftxui::Renderer(std::function<ftxui::Element()>([self] {
+        const auto& colors = self->theme_.activeColors();
+        if (!self->visible_) return ftxui::emptyElement();
+
+        ftxui::Elements logItems;
+        for (const auto& line : self->logLines_) {
+            logItems.push_back(ftxui::text(line));
+        }
+
+        auto log = ftxui::vbox(std::move(logItems)) | ftxui::frame | ftxui::flex;
+
+        auto frame = ftxui::vbox({
+            ftxui::text(" Run ") | ftxui::bold | ftxui::center,
+            ftxui::separator(),
+            ftxui::text(" Executable: " + self->executable_),
+            log,
+            ftxui::separator(),
+            ftxui::text(" 'r': run   'esc': close ") | ftxui::center | ftxui::dim,
+        });
+
+        return frame | ftxui::border |
+               ftxui::color(colorFromString(colors.foreground)) |
+               ftxui::bgcolor(colorFromString(colors.background));
+    }));
+
+    return ftxui::Maybe(renderer, &visible_);
+}
+
+void RunOverlay::show() {
+    visible_ = true;
+    logLines_.clear();
+    isRunning_ = false;
+}
+
+void RunOverlay::hide() { visible_ = false; }
+void RunOverlay::toggle() { visible_ = !visible_; }
+
+void RunOverlay::setExecutable(const std::string& exe) { executable_ = exe; }
+void RunOverlay::setArgs(const std::vector<std::string>& args) { args_ = args; }
+
+} // namespace lazycmake::tui

@@ -1,0 +1,7 @@
+{
+    "name": "clang-format",
+    "version": "1.0.0",
+    "description": "Auto-formats source files on save using clang-format",
+    "enabled": true,
+    "library": "liblazycmake_clang_format.so"
+}
