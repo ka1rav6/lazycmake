@@ -14,6 +14,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(LAZYCMAKE_BUILD_TESTS "Build the Catch2 test suite" ON)
+option(LAZYCMAKE_BUILD_EXAMPLES "Build the examples" ON)
 option(LAZYCMAKE_BUILD_TUI "Build the FTXUI-based TUI application (off during early Core-only phases)" OFF)
 
 # --- Dependencies (FetchContent) -----------------------------------------
@@ -138,4 +139,8 @@ endforeach()
 if(LAZYCMAKE_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
+endif()
+
+if(LAZYCMAKE_BUILD_EXAMPLES)
+    add_subdirectory(examples)
 endif()
