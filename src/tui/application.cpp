@@ -38,35 +38,33 @@ ftxui::Component Application::makeStartupScreen() {
 
     // Compose title | menu | footer as a vertical stack,
     // then wrap with theme-aware backgrounds via a Renderer.
-    auto title = ftxui::Renderer(std::function<ftxui::Element()>([self] {
-        return ftxui::vbox({
+    auto menuComp = screen->component;
+
+    // Render title + menu + footer as a single composite element.
+    // Events are forwarded to menuComp (the CatchEvent-wrapped Menu), which
+    // handles j/k for item navigation and Enter for selection. We do NOT use
+    // Container::Vertical here because its focus-cycling would intercept j/k.
+    auto styled = ftxui::Renderer(menuComp, std::function<ftxui::Element()>([self, menuComp] {
+        const auto& colors = self->theme_.activeColors();
+        auto title = ftxui::vbox({
             ftxui::text("LazyCMake") | ftxui::bold | ftxui::center,
             ftxui::text("lazygit, but for CMake") | ftxui::center | ftxui::dim,
             ftxui::separator(),
             ftxui::text(""),
         });
-    }));
-
-    auto footer = ftxui::Renderer(std::function<ftxui::Element()>([self] {
-        return ftxui::vbox({
+        auto footer = ftxui::vbox({
             ftxui::text(""),
             ftxui::separator(),
             ftxui::text("Navigate: j/k   Select: enter   Quit: q   Help: h")
                 | ftxui::center | ftxui::dim,
         });
-    }));
-
-    // Title + menu + footer stacked vertically. The menu handles j/k/enter.
-    auto inner = ftxui::Container::Vertical({
-        title,
-        screen->component,
-        footer,
-    });
-
-    // Wrap with theme styling.
-    auto styled = ftxui::Renderer(std::function<ftxui::Element()>([self, inner] {
-        const auto& colors = self->theme_.activeColors();
-        return inner->Render() |
+        return ftxui::vbox({
+                   title | ftxui::center,
+                   ftxui::separator(),
+                   menuComp->Render(),
+                   ftxui::separator(),
+                   footer,
+               }) |
                ftxui::bgcolor(colorFromString(colors.background)) |
                ftxui::color(colorFromString(colors.foreground));
     }));
