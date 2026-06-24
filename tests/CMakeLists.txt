@@ -3,6 +3,10 @@ add_executable(lazycmake_core_tests
     core/target_validator_test.cpp
     core/project_repository_test.cpp
     cmake_gen/modern_cmake_generator_test.cpp
+    config/settings_manager_test.cpp
+    config/keymap_manager_test.cpp
+    config/theme_manager_test.cpp
+    config/template_manager_test.cpp
 )
 
 target_link_libraries(lazycmake_core_tests

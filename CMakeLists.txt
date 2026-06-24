@@ -76,6 +76,11 @@ add_library(lazycmake_core STATIC
     src/cmake_gen/cmake_file.cpp
     src/cmake_gen/cmake_printer.cpp
     src/cmake_gen/modern_cmake_generator.cpp
+    src/config/config_types.cpp
+    src/config/settings_manager.cpp
+    src/config/keymap_manager.cpp
+    src/config/theme_manager.cpp
+    src/config/template_manager.cpp
 )
 
 target_include_directories(lazycmake_core
@@ -112,6 +117,7 @@ file(GLOB_RECURSE LAZYCMAKE_NON_TUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/plugins/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fswatch/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/events/*.cpp
 )
 foreach(_lazycmake_src_file ${LAZYCMAKE_NON_TUI_SOURCES})
     file(STRINGS ${_lazycmake_src_file} _lazycmake_ftxui_hits REGEX "ftxui/")
