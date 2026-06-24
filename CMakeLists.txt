@@ -81,6 +81,10 @@ add_library(lazycmake_core STATIC
     src/config/keymap_manager.cpp
     src/config/theme_manager.cpp
     src/config/template_manager.cpp
+    src/events/event_bus.cpp
+    src/build/build_backend.cpp
+    src/build/build_manager.cpp
+    src/build/run_manager.cpp
 )
 
 target_include_directories(lazycmake_core

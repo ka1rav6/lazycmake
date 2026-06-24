@@ -7,6 +7,9 @@ add_executable(lazycmake_core_tests
     config/keymap_manager_test.cpp
     config/theme_manager_test.cpp
     config/template_manager_test.cpp
+    events/event_bus_test.cpp
+    build/build_manager_test.cpp
+    build/run_manager_test.cpp
 )
 
 target_link_libraries(lazycmake_core_tests
