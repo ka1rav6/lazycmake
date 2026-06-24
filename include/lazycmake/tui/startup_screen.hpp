@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <ftxui/component/component.hpp>
 
 #include "lazycmake/config/keymap_manager.hpp"
@@ -13,15 +15,18 @@ public:
     explicit StartupScreen(config::KeymapManager& keymap);
     ~StartupScreen() override = default;
 
+    using ActionCallback = std::function<void(int)>;
+    void setOnAction(ActionCallback cb) { onAction_ = std::move(cb); }
+
     int selectedIndex() const { return selectedIndex_; }
 
 private:
     ftxui::Component buildMenu();
-    bool onEvent(ftxui::Event event);
 
     config::KeymapManager& keymap_;
     int selectedIndex_ = 0;
     ftxui::Component menu_;
+    ActionCallback onAction_;
 };
 
 } // namespace lazycmake::tui

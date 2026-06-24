@@ -8,11 +8,11 @@
 
 #include "lazycmake/config/keymap_manager.hpp"
 #include "lazycmake/config/theme_manager.hpp"
+#include "lazycmake/core/project.hpp"
 
 namespace lazycmake::tui {
 
 // Target panel — center panel showing project targets.
-// Phase 5: static dummy target list. Real Project-backed list in Phase 6.
 class TargetPanel {
 public:
     explicit TargetPanel(config::KeymapManager& keymap,
@@ -22,6 +22,9 @@ public:
     void focus() { focused_ = true; }
     void blur() { focused_ = false; }
 
+    // Point panel at a project to show its targets.
+    void setProject(const core::Project& project);
+
 private:
     bool onEvent(ftxui::Event event);
     ftxui::Element render();
@@ -30,7 +33,6 @@ private:
     config::ThemeManager& theme_;
     bool focused_ = false;
 
-    // Static dummy data for Phase 5.
     std::vector<std::string> targets_;
     int selectedIndex_ = 0;
 };

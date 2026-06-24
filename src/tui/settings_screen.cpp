@@ -15,9 +15,10 @@ SettingsScreen::SettingsScreen(config::KeymapManager& keymap,
 }
 
 ftxui::Component SettingsScreen::buildSettingsView() {
-    const auto& app = settings_.settings();
+    auto self = this;
+    return ftxui::Renderer(std::function<ftxui::Element()>([self] {
+        const auto& app = self->settings_.settings();
 
-    return ftxui::Renderer([&app] {
         auto lines = ftxui::vbox({
             ftxui::text("=== General Settings ==="),
             ftxui::text("  Language:    " + app.general.language),
@@ -39,7 +40,7 @@ ftxui::Component SettingsScreen::buildSettingsView() {
         });
 
         return lines | ftxui::border;
-    });
+    }));
 }
 
 } // namespace lazycmake::tui

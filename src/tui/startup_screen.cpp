@@ -23,14 +23,21 @@ StartupScreen::StartupScreen(config::KeymapManager& keymap)
     : keymap_(keymap) {
     name = "startup";
     menu_ = buildMenu();
-    component = ftxui::Container::Vertical({
-        menu_,
-    });
+    component = menu_;
 }
 
 ftxui::Component StartupScreen::buildMenu() {
     auto menu = ftxui::Menu(&kMenuItems, &selectedIndex_);
-    return menu;
+
+    auto wrapped = menu | ftxui::CatchEvent([this](ftxui::Event event) {
+        if (event == ftxui::Event::Return) {
+            if (onAction_) onAction_(selectedIndex_);
+            return true;
+        }
+        return false;
+    });
+
+    return wrapped;
 }
 
 } // namespace lazycmake::tui

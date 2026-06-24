@@ -8,11 +8,11 @@
 
 #include "lazycmake/config/keymap_manager.hpp"
 #include "lazycmake/config/theme_manager.hpp"
+#include "lazycmake/events/event_bus.hpp"
 
 namespace lazycmake::tui {
 
 // Output panel — right-most panel showing build/run/log output.
-// Phase 5: static placeholder. Real streaming output in Phase 6.
 class OutputPanel {
 public:
     explicit OutputPanel(config::KeymapManager& keymap,
@@ -22,7 +22,10 @@ public:
     void focus() { focused_ = true; }
     void blur() { focused_ = false; }
 
-    // Append a line of output (Phase 6: called by EventBus subscriber).
+    // Wire to EventBus for automatic output capture.
+    void connect(events::EventBus& bus);
+
+    // Manually append a line of output.
     void append(const std::string& line);
 
 private:

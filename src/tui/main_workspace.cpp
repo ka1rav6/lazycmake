@@ -3,10 +3,6 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
 
-#include "lazycmake/tui/panels/file_panel.hpp"
-#include "lazycmake/tui/panels/target_panel.hpp"
-#include "lazycmake/tui/panels/output_panel.hpp"
-
 namespace lazycmake::tui {
 
 MainWorkspace::MainWorkspace(config::KeymapManager& keymap,
@@ -14,19 +10,28 @@ MainWorkspace::MainWorkspace(config::KeymapManager& keymap,
     : keymap_(keymap), theme_(theme) {
     name = "main_workspace";
 
-    auto filePanel = std::make_shared<FilePanel>(keymap, theme);
-    auto targetPanel = std::make_shared<TargetPanel>(keymap, theme);
-    auto outputPanel = std::make_shared<OutputPanel>(keymap, theme);
+    filePanel_ = std::make_shared<FilePanel>(keymap, theme);
+    targetPanel_ = std::make_shared<TargetPanel>(keymap, theme);
+    outputPanel_ = std::make_shared<OutputPanel>(keymap, theme);
 
-    filePanel->focus();  // Start with file panel focused.
+    filePanel_->focus();
 
     layout_ = ftxui::Container::Horizontal({
-        filePanel->build() | ftxui::flex,
-        targetPanel->build() | ftxui::flex,
-        outputPanel->build() | ftxui::flex,
+        filePanel_->build() | ftxui::flex,
+        targetPanel_->build() | ftxui::flex,
+        outputPanel_->build() | ftxui::flex,
     });
 
     component = layout_ | ftxui::border;
+}
+
+void MainWorkspace::setProject(const core::Project& project) {
+    filePanel_->setProject(project);
+    targetPanel_->setProject(project);
+}
+
+void MainWorkspace::setEventBus(events::EventBus& bus) {
+    outputPanel_->connect(bus);
 }
 
 } // namespace lazycmake::tui

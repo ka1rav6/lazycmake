@@ -9,10 +9,13 @@
 #include "lazycmake/config/keymap_manager.hpp"
 #include "lazycmake/config/settings_manager.hpp"
 #include "lazycmake/config/theme_manager.hpp"
+#include "lazycmake/core/project.hpp"
 #include "lazycmake/events/event_bus.hpp"
 #include "lazycmake/tui/screen.hpp"
 
 namespace lazycmake::tui {
+
+class StartupScreen;
 
 class Application {
 public:
@@ -30,8 +33,10 @@ public:
 private:
     void loadConfig();
     ftxui::Component buildRootComponent();
-    ftxui::Component buildMainComponent();
-    bool onEvent(ftxui::Event event);
+    void onStartupAction(int idx);
+    void navigateToStartup();
+    void navigateToWorkspace(core::Project project);
+    void updateRootComponent();
 
     events::EventBus eventBus_;
     config::SettingsManager settings_;
@@ -39,6 +44,8 @@ private:
     config::ThemeManager theme_;
     ScreenStack screens_;
     ftxui::ScreenInteractive screen_;
+    ftxui::Component rootComponent_;
+    StartupScreen* startupScreenPtr_ = nullptr;
 };
 
 } // namespace lazycmake::tui

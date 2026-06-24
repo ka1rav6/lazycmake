@@ -6,6 +6,11 @@
 
 #include "lazycmake/config/keymap_manager.hpp"
 #include "lazycmake/config/theme_manager.hpp"
+#include "lazycmake/core/project.hpp"
+#include "lazycmake/events/event_bus.hpp"
+#include "lazycmake/tui/panels/file_panel.hpp"
+#include "lazycmake/tui/panels/output_panel.hpp"
+#include "lazycmake/tui/panels/target_panel.hpp"
 #include "lazycmake/tui/screen.hpp"
 
 namespace lazycmake::tui {
@@ -17,6 +22,9 @@ public:
                            config::ThemeManager& theme);
     ~MainWorkspace() override = default;
 
+    void setProject(const core::Project& project);
+    void setEventBus(events::EventBus& bus);
+
     int activePanel() const { return activePanel_; }
 
 private:
@@ -27,6 +35,10 @@ private:
     config::ThemeManager& theme_;
     int activePanel_ = 0;
     ftxui::Component layout_;
+
+    std::shared_ptr<FilePanel> filePanel_;
+    std::shared_ptr<TargetPanel> targetPanel_;
+    std::shared_ptr<OutputPanel> outputPanel_;
 };
 
 } // namespace lazycmake::tui
