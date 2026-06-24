@@ -5,8 +5,8 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
 
-#include "lazycmake/config/settings_manager.hpp"
 #include "lazycmake/cmake_gen/modern_cmake_generator.hpp"
+#include "lazycmake/config/settings_manager.hpp"
 #include "lazycmake/core/project_repository.hpp"
 #include "lazycmake/tui/color_helper.hpp"
 #include "lazycmake/tui/help_overlay.hpp"
@@ -29,134 +29,131 @@ void Application::loadConfig() {
     spdlog::info("Configuration loaded");
 }
 
-ftxui::Component Application::buildRootComponent() {
+ftxui::Component Application::makeStartupScreen() {
     auto self = this;
-
-    auto startup = std::make_unique<StartupScreen>(keymap_);
-    startup->setOnAction([self](int idx) {
+    auto screen = std::make_unique<StartupScreen>(keymap_);
+    screen->setOnAction([self](int idx) {
         self->onStartupAction(idx);
     });
-    startupScreenPtr_ = startup.get();
 
-    // Build a fullscreen renderer that wraps the startup menu with theme-aware decoration.
-    auto startupRenderer = ftxui::Renderer(startup->component, [self] {
-        const auto& colors = self->theme_.activeColors();
-
-        auto title = ftxui::vbox({
+    // Compose title | menu | footer as a vertical stack,
+    // then wrap with theme-aware backgrounds via a Renderer.
+    auto title = ftxui::Renderer(std::function<ftxui::Element()>([self] {
+        return ftxui::vbox({
             ftxui::text("LazyCMake") | ftxui::bold | ftxui::center,
             ftxui::text("lazygit, but for CMake") | ftxui::center | ftxui::dim,
             ftxui::separator(),
             ftxui::text(""),
         });
+    }));
 
-        auto footer = ftxui::vbox({
+    auto footer = ftxui::Renderer(std::function<ftxui::Element()>([self] {
+        return ftxui::vbox({
             ftxui::text(""),
             ftxui::separator(),
             ftxui::text("Navigate: j/k   Select: enter   Quit: q   Help: h")
                 | ftxui::center | ftxui::dim,
         });
+    }));
 
-        return ftxui::vbox({
-                   title | ftxui::center,
-                   ftxui::separator(),
-                   footer,
-               }) |
+    // Title + menu + footer stacked vertically. The menu handles j/k/enter.
+    auto inner = ftxui::Container::Vertical({
+        title,
+        screen->component,
+        footer,
+    });
+
+    // Wrap with theme styling.
+    auto styled = ftxui::Renderer(std::function<ftxui::Element()>([self, inner] {
+        const auto& colors = self->theme_.activeColors();
+        return inner->Render() |
                ftxui::bgcolor(colorFromString(colors.background)) |
                ftxui::color(colorFromString(colors.foreground));
+    }));
+
+    return styled;
+}
+
+ftxui::Component Application::makeWizardScreen() {
+    auto self = this;
+    auto screen = std::make_unique<WizardScreen>(keymap_);
+    screen->setOnGenerate([self](core::Project project) {
+        self->onGenerateProject(std::move(project));
     });
-
-    startup->component = startupRenderer;
-    screens_.push(std::move(startup));
-
-    rootComponent_ = ftxui::Container::Vertical({
-        screens_.current()->component,
+    screen->setOnCancel([self] {
+        self->navigateToStartup();
     });
+    return screen->component;
+}
 
-    return rootComponent_;
+ftxui::Component Application::makeSettingsScreen() {
+    auto self = this;
+    auto screen = std::make_unique<SettingsScreen>(keymap_, settings_);
+    auto wrapped = screen->component | ftxui::CatchEvent([self](ftxui::Event e) {
+        if (e == ftxui::Event::Escape || e == ftxui::Event::Character('q')) {
+            self->navigateToStartup();
+            return true;
+        }
+        return false;
+    });
+    return wrapped;
+}
+
+ftxui::Component Application::makeWorkspaceScreen(core::Project project) {
+    auto screen = std::make_unique<MainWorkspace>(keymap_, theme_);
+    screen->setProject(project);
+    screen->setEventBus(eventBus_);
+    return screen->component;
 }
 
 void Application::onStartupAction(int idx) {
     switch (idx) {
-        case 0: { // New Project
-            auto wizard = std::make_unique<WizardScreen>(keymap_);
-            auto* wptr = wizard.get();
-            wizard->setOnGenerate([this, wptr](core::Project project) {
-                // Save project to disk.
-                core::ProjectRepository repo;
-                auto result = repo.save(project);
-                if (result) {
-                    spdlog::info("Project '{}' generated at {}",
-                                 project.name, project.rootDir.string());
-                } else {
-                    spdlog::error("Failed to save project: {}",
-                                  result.error().message);
-                }
-                // Navigate to main workspace.
-                navigateToWorkspace(std::move(project));
-            });
-            wizard->setOnCancel([this] {
-                navigateToStartup();
-            });
-            screens_.replace(std::move(wizard));
-            // Rebuild root with new current screen.
-            updateRootComponent();
-            break;
-        }
-        case 4: { // Settings
-            auto settings = std::make_unique<SettingsScreen>(keymap_, settings_);
-            settings->component = settings->component | ftxui::CatchEvent([this](ftxui::Event e) {
-                if (e == ftxui::Event::Escape || e == ftxui::Event::Character('q')) {
-                    navigateToStartup();
-                    return true;
-                }
-                return false;
-            });
-            screens_.push(std::move(settings));
-            updateRootComponent();
-            break;
-        }
-        case 5: // Quit
-            screen_.ExitLoopClosure()();
-            break;
+        case 0: navigateToWizard(); break;
+        case 4: navigateToSettings(); break;
+        case 5: screen_.ExitLoopClosure()(); break;
     }
 }
 
 void Application::navigateToStartup() {
-    while (screens_.size() > 1) {
-        screens_.pop();
-    }
-    updateRootComponent();
+    currentScreen_ = makeStartupScreen();
+}
+
+void Application::navigateToWizard() {
+    currentScreen_ = makeWizardScreen();
+}
+
+void Application::navigateToSettings() {
+    currentScreen_ = makeSettingsScreen();
 }
 
 void Application::navigateToWorkspace(core::Project project) {
-    auto workspace = std::make_unique<MainWorkspace>(keymap_, theme_);
-    workspace->setProject(project);
-    workspace->setEventBus(eventBus_);
-    while (screens_.size() > 1) {
-        screens_.pop();
-    }
-    screens_.replace(std::move(workspace));
-    updateRootComponent();
+    currentScreen_ = makeWorkspaceScreen(std::move(project));
 }
 
-void Application::updateRootComponent() {
-    auto* current = screens_.current();
-    if (!current) return;
-
-    rootComponent_ = ftxui::Container::Vertical({
-        current->component,
-    });
-
-    screen_.PostEvent(ftxui::Event::Custom);
+void Application::onGenerateProject(core::Project project) {
+    core::ProjectRepository repo;
+    auto result = repo.save(project);
+    if (result) {
+        spdlog::info("Project '{}' generated at {}",
+                     project.name, project.rootDir.string());
+    } else {
+        spdlog::error("Failed to save project: {}",
+                      result.error().message);
+    }
+    navigateToWorkspace(std::move(project));
 }
 
 int Application::run(int /*argc*/, char** /*argv*/) {
     spdlog::set_level(spdlog::level::info);
     loadConfig();
 
-    auto root = buildRootComponent();
-    screen_.Loop(root);
+    // Create the ScreenHolder that delegates to currentScreen_.
+    screenHolder_ = std::make_shared<ScreenHolder>(&currentScreen_);
 
+    // Set initial screen.
+    currentScreen_ = makeStartupScreen();
+
+    screen_.Loop(screenHolder_);
     return 0;
 }
 
