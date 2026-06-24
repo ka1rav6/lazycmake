@@ -72,6 +72,10 @@ add_library(lazycmake_core STATIC
     src/core/project.cpp
     src/core/target_validator.cpp
     src/core/project_repository.cpp
+    src/cmake_gen/generated_file_set.cpp
+    src/cmake_gen/cmake_file.cpp
+    src/cmake_gen/cmake_printer.cpp
+    src/cmake_gen/modern_cmake_generator.cpp
 )
 
 target_include_directories(lazycmake_core
