@@ -43,6 +43,10 @@ private:
     std::vector<std::string> logLines_;
     bool isRunning_ = false;
     bool showArgsForm_ = false;
+
+    events::EventBus::HandlerId runOutputId_{0};
+    events::EventBus::HandlerId runFinishedId_{0};
+    events::EventBus::HandlerId runStartedId_{0};
 };
 
 } // namespace lazycmake::tui

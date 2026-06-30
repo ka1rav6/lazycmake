@@ -15,6 +15,28 @@ RunOverlay::RunOverlay(events::EventBus& bus,
 
 ftxui::Component RunOverlay::build() {
     auto self = this;
+
+    // Subscribe to run events.
+    runStartedId_ = bus_.subscribe<events::RunStartedEvent>(
+        [self](const events::RunStartedEvent& e) {
+            self->logLines_.push_back("[start] Running " + e.executablePath);
+        });
+    runOutputId_ = bus_.subscribe<events::RunOutputEvent>(
+        [self](const events::RunOutputEvent& e) {
+            self->logLines_.push_back("[" + e.stream + "] " + e.line);
+        });
+    runFinishedId_ = bus_.subscribe<events::RunFinishedEvent>(
+        [self](const events::RunFinishedEvent& e) {
+            self->isRunning_ = false;
+            if (e.success) {
+                self->logLines_.push_back("[done] Process exited with code "
+                                          + std::to_string(e.exitCode));
+            } else {
+                self->logLines_.push_back("[failed] Process failed with code "
+                                          + std::to_string(e.exitCode));
+            }
+        });
+
     auto renderer = ftxui::Renderer(std::function<ftxui::Element()>([self] {
         const auto& colors = self->theme_.activeColors();
         if (!self->visible_) return ftxui::emptyElement();
@@ -54,7 +76,6 @@ ftxui::Component RunOverlay::build() {
         if (e == ftxui::Event::Character('r') && !self->isRunning_) {
             self->logLines_.clear();
             self->isRunning_ = true;
-            self->logLines_.push_back("Launching " + self->executable_ + "...");
             self->runManager_.run(self->executable_, self->args_);
             self->isRunning_ = false;
             return true;

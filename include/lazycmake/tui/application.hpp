@@ -61,6 +61,7 @@ private:
     void onGenerateProject(core::Project project);
 
     void setScreen(ftxui::Component screen);
+    void drainEventQueue();
 
     events::EventBus eventBus_;
     config::SettingsManager settings_;

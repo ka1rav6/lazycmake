@@ -15,6 +15,33 @@ BuildOverlay::BuildOverlay(events::EventBus& bus,
 
 ftxui::Component BuildOverlay::build() {
     auto self = this;
+
+    // Subscribe to build events.
+    buildProgressId_ = bus_.subscribe<events::BuildProgressEvent>(
+        [self](const events::BuildProgressEvent& e) {
+            self->appendLog("[progress] " + e.stage + ": " + e.detail);
+        });
+    buildFinishedId_ = bus_.subscribe<events::BuildFinishedEvent>(
+        [self](const events::BuildFinishedEvent& e) {
+            self->setBuilding(false);
+            if (e.success) {
+                self->appendLog("[done] Build of '" + e.targetName
+                                + "' succeeded (exit " + std::to_string(e.exitCode) + ")");
+            } else {
+                self->appendLog("[failed] Build of '" + e.targetName
+                                + "' FAILED (exit " + std::to_string(e.exitCode) + ")");
+            }
+        });
+    configFinishedId_ = bus_.subscribe<events::ConfigureFinishedEvent>(
+        [self](const events::ConfigureFinishedEvent& e) {
+            if (e.success) {
+                self->appendLog("[configure] CMake configured successfully");
+                if (!e.output.empty()) self->appendLog(e.output);
+            } else {
+                self->appendLog("[configure] CMake configure FAILED: " + e.errorMsg);
+            }
+        });
+
     auto renderer = ftxui::Renderer(std::function<ftxui::Element()>([self] {
         const auto& colors = self->theme_.activeColors();
         if (!self->visible_) return ftxui::emptyElement();

@@ -44,6 +44,10 @@ private:
     std::string target_;
     std::vector<std::string> logLines_;
     bool isBuilding_ = false;
+
+    events::EventBus::HandlerId buildProgressId_{0};
+    events::EventBus::HandlerId buildFinishedId_{0};
+    events::EventBus::HandlerId configFinishedId_{0};
 };
 
 } // namespace lazycmake::tui

@@ -9,6 +9,7 @@
 
 #include "lazycmake/cmake_gen/modern_cmake_generator.hpp"
 #include "lazycmake/config/settings_manager.hpp"
+#include "lazycmake/core/generated_file_lock.hpp"
 #include "lazycmake/core/project_repository.hpp"
 #include "lazycmake/tui/build_overlay.hpp"
 #include "lazycmake/tui/color_helper.hpp"
@@ -110,7 +111,14 @@ void Application::onStartupAction(int idx) {
 
 void Application::setScreen(ftxui::Component screen) {
     screenRoot_->DetachAllChildren();
-    screenRoot_->Add(std::move(screen));
+
+    // Wrap screen with a renderer that drains the EventBus queue each frame.
+    auto drainer = ftxui::Renderer([this, screen] {
+        eventBus_.drainQueue();
+        return screen->Render();
+    });
+
+    screenRoot_->Add(std::move(drainer));
 }
 
 void Application::navigateToStartup() {
@@ -143,12 +151,91 @@ void Application::navigateToWizard() {
 }
 
 void Application::navigateToOpen() {
-    // Stub: open project via file dialog. For now, go back.
-    navigateToStartup();
+    auto self = this;
+
+    auto projects = std::make_shared<std::vector<std::pair<std::string, std::filesystem::path>>>();
+    auto selected = std::make_shared<int>(0);
+
+    // Search current dir and one level deep for .lazycmake/project.json
+    auto searchDir = [&](const std::filesystem::path& dir) {
+        std::error_code ec;
+        auto manifest = dir / ".lazycmake" / "project.json";
+        if (std::filesystem::exists(manifest, ec)) {
+            projects->push_back({dir.filename().string(), dir});
+        }
+    };
+    searchDir(std::filesystem::current_path());
+    std::error_code ec;
+    for (const auto& entry : std::filesystem::directory_iterator(std::filesystem::current_path(), ec)) {
+        if (entry.is_directory()) {
+            searchDir(entry.path());
+        }
+    }
+
+    auto renderer = ftxui::Renderer([self, projects, selected] {
+        const auto& colors = self->theme_.activeColors();
+
+        ftxui::Elements items;
+        items.push_back(ftxui::text(" Open Project ") | ftxui::bold | ftxui::center);
+        items.push_back(ftxui::separator());
+
+        if (projects->empty()) {
+            items.push_back(ftxui::text("  No projects found in current directory.") | ftxui::dim);
+            items.push_back(ftxui::text("  Navigate to a project directory and try again.") | ftxui::dim);
+        } else {
+            for (size_t i = 0; i < projects->size(); ++i) {
+                auto text = ftxui::text("  " + projects->at(i).first);
+                if (static_cast<int>(i) == *selected) {
+                    items.push_back(text | ftxui::bgcolor(
+                        colorFromString(colors.listSelectionBackground)) |
+                        ftxui::color(colorFromString(colors.listSelectionForeground)));
+                } else {
+                    items.push_back(text | ftxui::color(colorFromString(colors.foreground)));
+                }
+            }
+        }
+
+        items.push_back(ftxui::separator());
+        items.push_back(ftxui::text(" j/k: navigate   enter: open   q: back ")
+                        | ftxui::center | ftxui::dim);
+
+        return ftxui::vbox(std::move(items)) |
+               ftxui::bgcolor(colorFromString(colors.background));
+    });
+
+    auto component = ftxui::CatchEvent(renderer, [self, projects, selected](ftxui::Event e) {
+        if (e == ftxui::Event::Character('q') || e == ftxui::Event::Escape) {
+            self->navigateToStartup();
+            return true;
+        }
+        if (e == ftxui::Event::Character('j') || e == ftxui::Event::ArrowDown) {
+            if (!projects->empty()) {
+                *selected = std::min(*selected + 1, static_cast<int>(projects->size()) - 1);
+            }
+            return true;
+        }
+        if (e == ftxui::Event::Character('k') || e == ftxui::Event::ArrowUp) {
+            *selected = std::max(*selected - 1, 0);
+            return true;
+        }
+        if (e == ftxui::Event::Return && !projects->empty()) {
+            auto path = projects->at(*selected).second;
+            core::ProjectRepository repo;
+            auto result = repo.load(path);
+            if (result) {
+                self->project_ = std::move(result.value());
+                self->navigateToWorkspace(self->project_);
+            }
+            return true;
+        }
+        return false;
+    });
+
+    setScreen(std::move(component));
 }
 
 void Application::navigateToTemplates() {
-    // Stub: template selection. For now, go back.
+    // Stub: template selection.
     navigateToStartup();
 }
 
@@ -257,18 +344,42 @@ void Application::onGenerateProject(core::Project project) {
     spdlog::info("Generated {} files for project '{}'",
                  genFiles.size(), project.name);
 
+    // Load the file lock to detect hand-edited files.
+    core::GeneratedFileLock fileLock(
+        project.rootDir / ".lazycmake" / "generated.lock.json",
+        project.rootDir);
+    fileLock.load();
+
     // Write generated files to disk.
     for (const auto& [relPath, content] : genFiles.files()) {
         auto fullPath = project.rootDir / relPath;
         std::filesystem::create_directories(fullPath.parent_path(), ec);
+
+        // Skip files the user has marked as owned.
+        if (fileLock.isUserOwned(relPath)) {
+            spdlog::info("  Skipping {} (user-owned)", relPath.generic_string());
+            continue;
+        }
+
+        // Check for conflict (on-disk hash differs from stored hash).
+        auto conflict = fileLock.checkConflict(relPath, content);
+        if (conflict.hasConflict) {
+            spdlog::warn("  Conflict detected for {}, overwriting", relPath.generic_string());
+            // TODO: show conflict dialog for interactive resolution
+        }
+
         std::ofstream outFile(fullPath);
         if (outFile.is_open()) {
             outFile << content;
+            fileLock.recordHash(relPath, content);
             spdlog::info("  Wrote {}", relPath.generic_string());
         } else {
             spdlog::error("  Failed to write {}", relPath.generic_string());
         }
     }
+
+    // Save the lock file so future generations can detect changes.
+    fileLock.save();
 
     // Create src/main.cpp stub if it doesn't exist.
     auto mainCppPath = project.rootDir / "src" / "main.cpp";
@@ -298,6 +409,10 @@ void Application::onGenerateProject(core::Project project) {
     }
 
     navigateToWorkspace(std::move(project));
+}
+
+void Application::drainEventQueue() {
+    eventBus_.drainQueue();
 }
 
 int Application::run(int /*argc*/, char** /*argv*/) {
