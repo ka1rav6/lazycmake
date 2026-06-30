@@ -1,5 +1,7 @@
 #include "lazycmake/tui/main_workspace.hpp"
 
+#include <spdlog/spdlog.h>
+
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
 
@@ -36,18 +38,19 @@ MainWorkspace::MainWorkspace(config::KeymapManager& keymap,
 
     component = ftxui::CatchEvent(layout_, [this](ftxui::Event e) {
         if (e == ftxui::Event::Character('q')) {
+            spdlog::debug("Workspace: 'q' pressed, going back");
             if (onExit_) onExit_();
             return true;
         }
         if (e == ftxui::Event::Tab) {
-            // Cycle focus forward through panels.
             activePanel_ = (activePanel_ + 1) % 3;
+            spdlog::debug("Workspace: Tab -> panel {}", activePanel_);
             updatePanelFocus();
             return true;
         }
         if (e == ftxui::Event::TabReverse) {
-            // Cycle focus backward through panels.
             activePanel_ = (activePanel_ + 2) % 3;
+            spdlog::debug("Workspace: Shift+Tab -> panel {}", activePanel_);
             updatePanelFocus();
             return true;
         }
@@ -62,18 +65,22 @@ MainWorkspace::MainWorkspace(config::KeymapManager& keymap,
             return true;
         }
         if (e == ftxui::Event::Character('b')) {
+            spdlog::info("Workspace: 'b' -> build overlay");
             if (onBuild_) onBuild_();
             return true;
         }
         if (e == ftxui::Event::Character('r')) {
+            spdlog::info("Workspace: 'r' -> run overlay");
             if (onRun_) onRun_();
             return true;
         }
         if (e == ftxui::Event::Character('d')) {
+            spdlog::info("Workspace: 'd' -> dependency dialog");
             if (onDeps_) onDeps_();
             return true;
         }
         if (e == ftxui::Event::Character('h')) {
+            spdlog::info("Workspace: 'h' -> help overlay");
             if (onHelp_) onHelp_();
             return true;
         }

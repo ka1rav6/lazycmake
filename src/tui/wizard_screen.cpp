@@ -1,5 +1,7 @@
 #include "lazycmake/tui/wizard_screen.hpp"
 
+#include <spdlog/spdlog.h>
+
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
 
@@ -149,14 +151,24 @@ ftxui::Component WizardScreen::buildStep4() {
 ftxui::Component WizardScreen::buildNavigation() {
     return ftxui::Container::Horizontal({
         ftxui::Button(" < Back ", [this] {
-            if (currentStep_ > 0) --currentStep_;
+            if (currentStep_ > 0) {
+                --currentStep_;
+                spdlog::debug("Wizard: back to step {}", currentStep_);
+            }
         }),
         ftxui::Button(" Next > ", [this] {
-            if (currentStep_ < 4) ++currentStep_;
+            if (currentStep_ < 4) {
+                ++currentStep_;
+                spdlog::debug("Wizard: forward to step {}", currentStep_);
+            }
         }),
         ftxui::Button(" Generate ", [this] {
+            spdlog::info("Wizard: Generate pressed, collecting project");
             auto project = collectProject();
-            if (onGenerate_) onGenerate_(std::move(project));
+            if (onGenerate_) {
+                spdlog::info("Wizard: calling onGenerate for '{}'", project.name);
+                onGenerate_(std::move(project));
+            }
         }),
     });
 }

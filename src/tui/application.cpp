@@ -110,6 +110,8 @@ void Application::onStartupAction(int idx) {
 }
 
 void Application::setScreen(ftxui::Component screen) {
+    spdlog::debug("Screen: setScreen called, switching component");
+
     screenRoot_->DetachAllChildren();
 
     // Drainer sits at the bottom of the stack, invisible and event-transparent.
@@ -128,27 +130,35 @@ void Application::setScreen(ftxui::Component screen) {
     });
 
     screenRoot_->Add(std::move(stacked));
+    spdlog::debug("Screen: component switch complete");
 }
 
 void Application::navigateToStartup() {
+    spdlog::info("Screen: navigating to startup");
     screenState_.reset();
     overlayState_.reset();
     setScreen(makeStartupScreen());
 }
 
 void Application::navigateToWizard() {
+    spdlog::info("Screen: navigating to wizard");
     auto self = this;
     auto screen = std::make_unique<WizardScreen>(keymap_);
 
     screen->setOnGenerate([self](core::Project project) {
+        spdlog::info("Wizard: onGenerate fired");
         self->onGenerateProject(std::move(project));
     });
-    screen->setOnCancel([self] { self->navigateToStartup(); });
+    screen->setOnCancel([self] {
+        spdlog::info("Wizard: onCancel fired");
+        self->navigateToStartup();
+    });
 
     auto inner = screen->component;
     auto withKeys =
         ftxui::CatchEvent(std::move(inner), [self](ftxui::Event e) {
             if (e == ftxui::Event::Character('q')) {
+                spdlog::info("Wizard: 'q' pressed, exiting program");
                 self->screen_.ExitLoopClosure()();
                 return true;
             }
@@ -160,19 +170,24 @@ void Application::navigateToWizard() {
 }
 
 void Application::navigateToOpen() {
+    spdlog::info("OpenProject: scanning for projects");
     auto self = this;
 
-    auto projects = std::make_shared<std::vector<std::pair<std::string, std::filesystem::path>>>();
+    auto entryLabels = std::make_shared<std::vector<std::string>>();
+    auto entryPaths = std::make_shared<std::vector<std::filesystem::path>>();
     auto selected = std::make_shared<int>(0);
 
-    // Search current dir and one level deep for .lazycmake/project.json
     auto searchDir = [&](const std::filesystem::path& dir) {
         std::error_code ec;
         auto manifest = dir / ".lazycmake" / "project.json";
         if (std::filesystem::exists(manifest, ec)) {
-            projects->push_back({dir.filename().string(), dir});
+            entryLabels->push_back(dir.filename().string());
+            entryPaths->push_back(dir);
+            spdlog::debug("OpenProject: found '{}' at {}",
+                          dir.filename().string(), dir.string());
         }
     };
+
     searchDir(std::filesystem::current_path());
     std::error_code ec;
     for (const auto& entry : std::filesystem::directory_iterator(std::filesystem::current_path(), ec)) {
@@ -181,59 +196,54 @@ void Application::navigateToOpen() {
         }
     }
 
-    auto renderer = ftxui::Renderer([self, projects, selected] {
-        const auto& colors = self->theme_.activeColors();
+    if (entryLabels->empty()) {
+        entryLabels->push_back("(no projects found - press q or esc to go back)");
+        spdlog::info("OpenProject: no projects found");
+    } else {
+        spdlog::info("OpenProject: found {} project(s)", entryPaths->size());
+    }
 
-        ftxui::Elements items;
-        items.push_back(ftxui::text(" Open Project ") | ftxui::bold | ftxui::center);
-        items.push_back(ftxui::separator());
+    // Menu handles focus natively so j/k/arrows always work.
+    auto menu = ftxui::Menu(entryLabels.get(), selected.get());
 
-        if (projects->empty()) {
-            items.push_back(ftxui::text("  No projects found in current directory.") | ftxui::dim);
-            items.push_back(ftxui::text("  Navigate to a project directory and try again.") | ftxui::dim);
-        } else {
-            for (size_t i = 0; i < projects->size(); ++i) {
-                auto text = ftxui::text("  " + projects->at(i).first);
-                if (static_cast<int>(i) == *selected) {
-                    items.push_back(text | ftxui::bgcolor(
-                        colorFromString(colors.listSelectionBackground)) |
-                        ftxui::color(colorFromString(colors.listSelectionForeground)));
-                } else {
-                    items.push_back(text | ftxui::color(colorFromString(colors.foreground)));
-                }
-            }
-        }
-
-        items.push_back(ftxui::separator());
-        items.push_back(ftxui::text(" j/k: navigate   enter: open   q: back ")
-                        | ftxui::center | ftxui::dim);
-
-        return ftxui::vbox(std::move(items)) |
-               ftxui::bgcolor(colorFromString(colors.background));
+    auto container = ftxui::Container::Vertical({
+        ftxui::Renderer([self, entryLabels, menu] {
+            const auto& colors = self->theme_.activeColors();
+            return ftxui::vbox({
+                       ftxui::text(" Open Project ") | ftxui::bold | ftxui::center,
+                       ftxui::separator(),
+                       menu->Render(),
+                       ftxui::separator(),
+                       ftxui::text(" j/k: navigate   enter: open   q: back ")
+                           | ftxui::center | ftxui::dim,
+                   }) |
+                   ftxui::bgcolor(colorFromString(colors.background)) |
+                   ftxui::color(colorFromString(colors.foreground));
+        }),
     });
+    container->Add(menu);
 
-    auto component = ftxui::CatchEvent(renderer, [self, projects, selected](ftxui::Event e) {
+    auto component = ftxui::CatchEvent(container, [self, entryPaths, selected](ftxui::Event e) {
         if (e == ftxui::Event::Character('q') || e == ftxui::Event::Escape) {
+            spdlog::debug("OpenProject: going back to startup");
             self->navigateToStartup();
             return true;
         }
-        if (e == ftxui::Event::Character('j') || e == ftxui::Event::ArrowDown) {
-            if (!projects->empty()) {
-                *selected = std::min(*selected + 1, static_cast<int>(projects->size()) - 1);
+        if (e == ftxui::Event::Return) {
+            if (entryPaths->empty()) {
+                spdlog::debug("OpenProject: enter with no projects, ignoring");
+                return true;
             }
-            return true;
-        }
-        if (e == ftxui::Event::Character('k') || e == ftxui::Event::ArrowUp) {
-            *selected = std::max(*selected - 1, 0);
-            return true;
-        }
-        if (e == ftxui::Event::Return && !projects->empty()) {
-            auto path = projects->at(*selected).second;
+            auto path = entryPaths->at(*selected);
+            spdlog::info("OpenProject: loading project at {}", path.string());
             core::ProjectRepository repo;
             auto result = repo.load(path);
             if (result) {
                 self->project_ = std::move(result.value());
+                spdlog::info("OpenProject: loaded '{}'", self->project_.name);
                 self->navigateToWorkspace(self->project_);
+            } else {
+                spdlog::error("OpenProject: load failed: {}", result.error().message);
             }
             return true;
         }
@@ -249,6 +259,7 @@ void Application::navigateToTemplates() {
 }
 
 void Application::navigateToSettings() {
+    spdlog::info("Screen: navigating to settings");
     auto self = this;
     auto screen = std::make_unique<SettingsScreen>(keymap_, settings_);
 
@@ -257,6 +268,7 @@ void Application::navigateToSettings() {
         ftxui::CatchEvent(std::move(inner), [self](ftxui::Event e) {
             if (e == ftxui::Event::Character('q') ||
                 e == ftxui::Event::Escape) {
+                spdlog::debug("Settings: going back to startup");
                 self->navigateToStartup();
                 return true;
             }
@@ -268,6 +280,7 @@ void Application::navigateToSettings() {
 }
 
 void Application::navigateToWorkspace(core::Project project) {
+    spdlog::info("Screen: navigating to workspace for '{}'", project.name);
     auto self = this;
 
     // Create overlays.
