@@ -13,6 +13,12 @@ BuildOverlay::BuildOverlay(events::EventBus& bus,
                            build::BuildManager& buildManager)
     : bus_(bus), keymap_(keymap), theme_(theme), buildManager_(buildManager) {}
 
+BuildOverlay::~BuildOverlay() {
+    if (buildProgressId_) bus_.unsubscribe(buildProgressId_);
+    if (buildFinishedId_) bus_.unsubscribe(buildFinishedId_);
+    if (configFinishedId_) bus_.unsubscribe(configFinishedId_);
+}
+
 ftxui::Component BuildOverlay::build() {
     auto self = this;
 

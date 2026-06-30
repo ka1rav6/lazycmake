@@ -13,6 +13,12 @@ RunOverlay::RunOverlay(events::EventBus& bus,
                        build::RunManager& runManager)
     : bus_(bus), keymap_(keymap), theme_(theme), runManager_(runManager) {}
 
+RunOverlay::~RunOverlay() {
+    if (runOutputId_) bus_.unsubscribe(runOutputId_);
+    if (runFinishedId_) bus_.unsubscribe(runFinishedId_);
+    if (runStartedId_) bus_.unsubscribe(runStartedId_);
+}
+
 ftxui::Component RunOverlay::build() {
     auto self = this;
 

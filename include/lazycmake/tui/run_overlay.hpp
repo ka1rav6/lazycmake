@@ -19,6 +19,7 @@ public:
                config::KeymapManager& keymap,
                config::ThemeManager& theme,
                build::RunManager& runManager);
+    ~RunOverlay();
 
     ftxui::Component build();
     void show();

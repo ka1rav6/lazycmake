@@ -17,6 +17,7 @@ public:
                  config::KeymapManager& keymap,
                  config::ThemeManager& theme,
                  build::BuildManager& buildManager);
+    ~BuildOverlay();
 
     ftxui::Component build();
     void show();
@@ -32,8 +33,6 @@ public:
     void setBuilding(bool b);
 
 private:
-    void onBuildFinished(const build::BuildResult& result);
-
     events::EventBus& bus_;
     config::KeymapManager& keymap_;
     config::ThemeManager& theme_;

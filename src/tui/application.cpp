@@ -112,13 +112,22 @@ void Application::onStartupAction(int idx) {
 void Application::setScreen(ftxui::Component screen) {
     screenRoot_->DetachAllChildren();
 
-    // Wrap screen with a renderer that drains the EventBus queue each frame.
-    auto drainer = ftxui::Renderer([this, screen] {
+    // Drainer sits at the bottom of the stack, invisible and event-transparent.
+    auto drainer = ftxui::Renderer([this] {
         eventBus_.drainQueue();
-        return screen->Render();
+        return ftxui::emptyElement();
     });
 
-    screenRoot_->Add(std::move(drainer));
+    // Stacked renders children on top of each other.
+    // Events go to children in reverse order (topmost first).
+    // drainer is at index 0 (bottom) — never handles events.
+    // screen is at index 1 (top) — receives events normally through the FTXUI tree.
+    auto stacked = ftxui::Container::Stacked({
+        std::move(drainer),
+        std::move(screen),
+    });
+
+    screenRoot_->Add(std::move(stacked));
 }
 
 void Application::navigateToStartup() {
