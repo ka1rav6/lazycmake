@@ -95,7 +95,7 @@ That's it. The startup screen appears — press `j`/`k` to navigate, `Enter` to 
 
 ```bash
 # 1. Clone
-git clone https://github.com/anomalyco/lazycmake.git
+git clone https://github.com/ka1rav6/lazycmake.git
 cd lazycmake
 
 # 2. Core library + tests + examples (no TUI)

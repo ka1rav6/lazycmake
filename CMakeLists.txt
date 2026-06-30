@@ -304,7 +304,7 @@ set(CPACK_PACKAGE_NAME "LazyCMake")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "lazygit, but for CMake")
 set(CPACK_PACKAGE_VENDOR "LazyCMake Contributors")
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/anomalyco/lazycmake")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/ka1rav6/lazycmake")
 set(CPACK_PACKAGE_MAINTAINER "LazyCMake Contributors")
 
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
