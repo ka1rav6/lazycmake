@@ -60,7 +60,9 @@ private:
     void navigateToWorkspace(core::Project project);
     void onGenerateProject(core::Project project);
 
+    void scheduleScreen(ftxui::Component screen);
     void setScreen(ftxui::Component screen);
+    void applyPendingScreen();
     void drainEventQueue();
 
     events::EventBus eventBus_;
@@ -73,16 +75,14 @@ private:
     build::BuildManager buildManager_;
     build::RunManager runManager_;
 
-    // Root FTXUI container.  Passed once to Loop(); we swap children
-    // via DetachAllChildren() + Add() to transition between screens.
     ftxui::Component screenRoot_;
 
-    // Holds the current Screen object alive so that lambdas capturing
-    // |this| (raw pointer to the screen) remain valid.
     std::unique_ptr<Screen> screenState_;
-
-    // Holds overlay state alive for the workspace.
     std::unique_ptr<OverlayState> overlayState_;
+
+    ftxui::Component pendingScreen_;
+    bool hasPendingScreen_ = false;
+    bool loopActive_ = false;
 };
 
 } // namespace lazycmake::tui

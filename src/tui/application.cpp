@@ -40,8 +40,6 @@ void Application::loadConfig() {
 ftxui::Component Application::makeStartupScreen() {
     auto self = this;
 
-    // We store state as shared_ptr in the component captures so they
-    // stay valid even after screen transitions and returns.
     auto items = std::make_shared<std::vector<std::string>>(
         std::vector<std::string>{
             "New Project", "Open Project", "Recent Projects",
@@ -77,7 +75,7 @@ ftxui::Component Application::makeStartupScreen() {
 
     return ftxui::CatchEvent(styled, [self, items, selected](ftxui::Event e) {
         if (e == ftxui::Event::Character('q')) {
-            self->screen_.ExitLoopClosure()();
+            self->screen_.Exit();
             return true;
         }
         if (e == ftxui::Event::Character('j') ||
@@ -105,25 +103,29 @@ void Application::onStartupAction(int idx) {
         case 1: navigateToOpen(); break;
         case 3: navigateToTemplates(); break;
         case 4: navigateToSettings(); break;
-        case 5: screen_.ExitLoopClosure()(); break;
+        case 5: screen_.Exit(); break;
+    }
+}
+
+void Application::scheduleScreen(ftxui::Component screen) {
+    pendingScreen_ = std::move(screen);
+    hasPendingScreen_ = true;
+    if (loopActive_) {
+        spdlog::debug("Screen: scheduled transition, exiting loop");
+        screen_.Exit();
     }
 }
 
 void Application::setScreen(ftxui::Component screen) {
-    spdlog::debug("Screen: setScreen called, switching component");
+    spdlog::debug("Screen: applying new component tree");
 
     screenRoot_->DetachAllChildren();
 
-    // Drainer sits at the bottom of the stack, invisible and event-transparent.
     auto drainer = ftxui::Renderer([this] {
         eventBus_.drainQueue();
         return ftxui::emptyElement();
     });
 
-    // Stacked renders children on top of each other.
-    // Events go to children in reverse order (topmost first).
-    // drainer is at index 0 (bottom) — never handles events.
-    // screen is at index 1 (top) — receives events normally through the FTXUI tree.
     auto stacked = ftxui::Container::Stacked({
         std::move(drainer),
         std::move(screen),
@@ -133,11 +135,18 @@ void Application::setScreen(ftxui::Component screen) {
     spdlog::debug("Screen: component switch complete");
 }
 
+void Application::applyPendingScreen() {
+    if (hasPendingScreen_ && pendingScreen_) {
+        setScreen(std::move(pendingScreen_));
+        hasPendingScreen_ = false;
+    }
+}
+
 void Application::navigateToStartup() {
     spdlog::info("Screen: navigating to startup");
     screenState_.reset();
     overlayState_.reset();
-    setScreen(makeStartupScreen());
+    scheduleScreen(makeStartupScreen());
 }
 
 void Application::navigateToWizard() {
@@ -159,14 +168,19 @@ void Application::navigateToWizard() {
         ftxui::CatchEvent(std::move(inner), [self](ftxui::Event e) {
             if (e == ftxui::Event::Character('q')) {
                 spdlog::info("Wizard: 'q' pressed, exiting program");
-                self->screen_.ExitLoopClosure()();
+                self->screen_.Exit();
+                return true;
+            }
+            if (e == ftxui::Event::Escape) {
+                spdlog::debug("Wizard: Escape pressed, cancel");
+                self->navigateToStartup();
                 return true;
             }
             return false;
         });
 
     screenState_ = std::move(screen);
-    setScreen(std::move(withKeys));
+    scheduleScreen(std::move(withKeys));
 }
 
 void Application::navigateToOpen() {
@@ -203,7 +217,6 @@ void Application::navigateToOpen() {
         spdlog::info("OpenProject: found {} project(s)", entryPaths->size());
     }
 
-    // Menu handles focus natively so j/k/arrows always work.
     auto menu = ftxui::Menu(entryLabels.get(), selected.get());
 
     auto container = ftxui::Container::Vertical({
@@ -250,11 +263,10 @@ void Application::navigateToOpen() {
         return false;
     });
 
-    setScreen(std::move(component));
+    scheduleScreen(std::move(component));
 }
 
 void Application::navigateToTemplates() {
-    // Stub: template selection.
     navigateToStartup();
 }
 
@@ -276,14 +288,13 @@ void Application::navigateToSettings() {
         });
 
     screenState_ = std::move(screen);
-    setScreen(std::move(withKeys));
+    scheduleScreen(std::move(withKeys));
 }
 
 void Application::navigateToWorkspace(core::Project project) {
     spdlog::info("Screen: navigating to workspace for '{}'", project.name);
     auto self = this;
 
-    // Create overlays.
     auto buildOverlay = std::make_shared<BuildOverlay>(
         eventBus_, keymap_, theme_, buildManager_);
     auto runOverlay = std::make_shared<RunOverlay>(
@@ -294,12 +305,10 @@ void Application::navigateToWorkspace(core::Project project) {
         keymap_, theme_);
     auto helpOverlay = std::make_shared<HelpOverlay>(keymap_);
 
-    // Create main workspace.
     auto workspace = std::make_unique<MainWorkspace>(keymap_, theme_);
     workspace->setProject(project);
     workspace->setEventBus(eventBus_);
 
-    // Wire workspace callbacks.
     workspace->setOnBuild([self, buildOverlay] {
         buildOverlay->toggle();
     });
@@ -317,18 +326,12 @@ void Application::navigateToWorkspace(core::Project project) {
         self->navigateToStartup();
     });
 
-    // Build overlays.
     auto buildComp = buildOverlay->build();
     auto runComp = runOverlay->build();
     auto depComp = depDialog->build();
     auto conflictComp = conflictDialog->build();
     auto helpComp = helpOverlay->build();
 
-    // Stack workspace + overlays using Container::Tab or layering.
-    // FTXUI doesn't have a native overlay; we layer by stacking
-    // components. The approach: use a Container::Stacked (which layers
-    // children on top of each other). Each overlay is rendered on top
-    // of the workspace when visible.
     auto layered = ftxui::Container::Stacked({
         workspace->component,
         buildComp,
@@ -346,13 +349,12 @@ void Application::navigateToWorkspace(core::Project project) {
     overlayState_->conflictDialog = conflictDialog;
 
     screenState_ = std::move(workspace);
-    setScreen(std::move(layered));
+    scheduleScreen(std::move(layered));
 }
 
 void Application::onGenerateProject(core::Project project) {
     project_ = project;
 
-    // Create project directory structure.
     std::error_code ec;
     std::filesystem::create_directories(project.rootDir / "src", ec);
     std::filesystem::create_directories(project.rootDir / "include", ec);
@@ -360,34 +362,28 @@ void Application::onGenerateProject(core::Project project) {
         spdlog::error("Failed to create project directories: {}", ec.message());
     }
 
-    // Generate CMakeLists.txt and related files.
     cmake_gen::ModernCMakeGenerator generator;
     auto genFiles = generator.generate(project);
     spdlog::info("Generated {} files for project '{}'",
                  genFiles.size(), project.name);
 
-    // Load the file lock to detect hand-edited files.
     core::GeneratedFileLock fileLock(
         project.rootDir / ".lazycmake" / "generated.lock.json",
         project.rootDir);
     fileLock.load();
 
-    // Write generated files to disk.
     for (const auto& [relPath, content] : genFiles.files()) {
         auto fullPath = project.rootDir / relPath;
         std::filesystem::create_directories(fullPath.parent_path(), ec);
 
-        // Skip files the user has marked as owned.
         if (fileLock.isUserOwned(relPath)) {
             spdlog::info("  Skipping {} (user-owned)", relPath.generic_string());
             continue;
         }
 
-        // Check for conflict (on-disk hash differs from stored hash).
         auto conflict = fileLock.checkConflict(relPath, content);
         if (conflict.hasConflict) {
             spdlog::warn("  Conflict detected for {}, overwriting", relPath.generic_string());
-            // TODO: show conflict dialog for interactive resolution
         }
 
         std::ofstream outFile(fullPath);
@@ -400,10 +396,8 @@ void Application::onGenerateProject(core::Project project) {
         }
     }
 
-    // Save the lock file so future generations can detect changes.
     fileLock.save();
 
-    // Create src/main.cpp stub if it doesn't exist.
     auto mainCppPath = project.rootDir / "src" / "main.cpp";
     if (!std::filesystem::exists(mainCppPath)) {
         std::ofstream mainFile(mainCppPath);
@@ -419,7 +413,6 @@ void Application::onGenerateProject(core::Project project) {
         }
     }
 
-    // Save the project manifest.
     core::ProjectRepository repo;
     auto result = repo.save(project);
     if (result) {
@@ -442,8 +435,22 @@ int Application::run(int /*argc*/, char** /*argv*/) {
     loadConfig();
 
     screenRoot_ = ftxui::Container::Vertical({});
+
+    loopActive_ = false;
     navigateToStartup();
-    screen_.Loop(screenRoot_);
+    applyPendingScreen();
+
+    loopActive_ = true;
+    while (true) {
+        screen_.Loop(screenRoot_);
+        if (hasPendingScreen_) {
+            applyPendingScreen();
+        } else {
+            break;
+        }
+    }
+    loopActive_ = false;
+
     return 0;
 }
 
