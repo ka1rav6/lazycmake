@@ -9,11 +9,12 @@
 #include "lazycmake/config/keymap_manager.hpp"
 #include "lazycmake/config/theme_manager.hpp"
 #include "lazycmake/events/event_bus.hpp"
+#include "lazycmake/tui/panels/panel_base.hpp"
 
 namespace lazycmake::tui {
 
 // Output panel — right-most panel showing build/run/log output.
-class OutputPanel {
+class OutputPanel : public PanelBase {
 public:
     explicit OutputPanel(config::KeymapManager& keymap,
                          config::ThemeManager& theme);

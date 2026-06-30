@@ -27,8 +27,11 @@ public:
     void setBuildDir(const std::string& dir);
     void setTarget(const std::string& target);
 
+public:
+    void appendLog(const std::string& line);
+    void setBuilding(bool b);
+
 private:
-    ftxui::Component render();
     void onBuildFinished(const build::BuildResult& result);
 
     events::EventBus& bus_;

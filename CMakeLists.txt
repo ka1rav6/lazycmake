@@ -15,7 +15,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(LAZYCMAKE_BUILD_TESTS "Build the Catch2 test suite" ON)
 option(LAZYCMAKE_BUILD_EXAMPLES "Build the examples" ON)
-option(LAZYCMAKE_BUILD_TUI "Build the FTXUI-based TUI application (off during early Core-only phases)" OFF)
+option(LAZYCMAKE_BUILD_TUI "Build the FTXUI-based TUI application" ON)
 
 # --- Dependencies (FetchContent) -----------------------------------------
 # Pinned tags throughout: LazyCMake's own build is a working example of the
@@ -196,7 +196,6 @@ if(LAZYCMAKE_BUILD_TUI)
         src/tui/application.cpp
         src/tui/color_helper.cpp
         src/tui/screen.cpp
-        src/tui/startup_screen.cpp
         src/tui/wizard_screen.cpp
         src/tui/main_workspace.cpp
         src/tui/settings_screen.cpp

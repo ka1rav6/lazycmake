@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <string>
 
 #include <ftxui/component/component.hpp>
@@ -21,13 +22,13 @@ public:
     void hide();
     bool isVisible() const { return visible_; }
 
+    void setOnResolved(std::function<void()> cb);
+
     core::GeneratedFileLock::ConflictAction chosenAction() const {
         return chosenAction_;
     }
 
 private:
-    ftxui::Component render();
-
     config::KeymapManager& keymap_;
     config::ThemeManager& theme_;
 
@@ -36,6 +37,7 @@ private:
     core::GeneratedFileLock::ConflictResult result_;
     core::GeneratedFileLock::ConflictAction chosenAction_ =
         core::GeneratedFileLock::ConflictAction::Overwrite;
+    std::function<void()> onConflictResolved_;
 };
 
 } // namespace lazycmake::tui

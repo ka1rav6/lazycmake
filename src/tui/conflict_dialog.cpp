@@ -40,7 +40,32 @@ ftxui::Component ConflictDialog::build() {
                ftxui::bgcolor(colorFromString(colors.background));
     }));
 
-    return ftxui::Maybe(renderer, &visible_);
+    return ftxui::CatchEvent(ftxui::Maybe(renderer, &visible_), [self](ftxui::Event e) {
+        if (!self->visible_) return false;
+        if (e == ftxui::Event::Escape) {
+            self->hide();
+            return true;
+        }
+        if (e == ftxui::Event::Character('1')) {
+            self->chosenAction_ = core::GeneratedFileLock::ConflictAction::ViewDiff;
+            self->onConflictResolved_();
+            self->hide();
+            return true;
+        }
+        if (e == ftxui::Event::Character('2')) {
+            self->chosenAction_ = core::GeneratedFileLock::ConflictAction::Overwrite;
+            self->onConflictResolved_();
+            self->hide();
+            return true;
+        }
+        if (e == ftxui::Event::Character('3')) {
+            self->chosenAction_ = core::GeneratedFileLock::ConflictAction::KeepMine;
+            self->onConflictResolved_();
+            self->hide();
+            return true;
+        }
+        return false;
+    });
 }
 
 void ConflictDialog::show(const std::string& filePath,
@@ -52,5 +77,9 @@ void ConflictDialog::show(const std::string& filePath,
 }
 
 void ConflictDialog::hide() { visible_ = false; }
+
+void ConflictDialog::setOnResolved(std::function<void()> cb) {
+    onConflictResolved_ = std::move(cb);
+}
 
 } // namespace lazycmake::tui

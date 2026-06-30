@@ -9,11 +9,12 @@
 #include "lazycmake/config/keymap_manager.hpp"
 #include "lazycmake/config/theme_manager.hpp"
 #include "lazycmake/core/project.hpp"
+#include "lazycmake/tui/panels/panel_base.hpp"
 
 namespace lazycmake::tui {
 
 // Target panel — center panel showing project targets.
-class TargetPanel {
+class TargetPanel : public PanelBase {
 public:
     explicit TargetPanel(config::KeymapManager& keymap,
                          config::ThemeManager& theme);

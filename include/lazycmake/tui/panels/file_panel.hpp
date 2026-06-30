@@ -10,11 +10,12 @@
 #include "lazycmake/config/keymap_manager.hpp"
 #include "lazycmake/config/theme_manager.hpp"
 #include "lazycmake/core/project.hpp"
+#include "lazycmake/tui/panels/panel_base.hpp"
 
 namespace lazycmake::tui {
 
 // File panel — left-most panel showing project file tree.
-class FilePanel {
+class FilePanel : public PanelBase {
 public:
     explicit FilePanel(config::KeymapManager& keymap,
                        config::ThemeManager& theme);

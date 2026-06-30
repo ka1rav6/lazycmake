@@ -29,7 +29,7 @@ ftxui::Component BuildOverlay::build() {
         auto stageStr = build::toString(self->buildManager_.currentStage());
         auto statusText = self->isBuilding_
             ? ftxui::text("Building... [" + stageStr + "]")
-            : ftxui::text("Build " + stageStr);
+            : ftxui::text("Build: " + stageStr);
 
         auto frame = ftxui::vbox({
             ftxui::text(" Build ") | ftxui::bold | ftxui::center,
@@ -46,13 +46,36 @@ ftxui::Component BuildOverlay::build() {
                ftxui::bgcolor(colorFromString(colors.background));
     }));
 
-    return ftxui::Maybe(renderer, &visible_);
+    return ftxui::CatchEvent(ftxui::Maybe(renderer, &visible_), [self](ftxui::Event e) {
+        if (!self->visible_) return false;
+        if (e == ftxui::Event::Escape) {
+            self->hide();
+            return true;
+        }
+        if (e == ftxui::Event::Character('c')) {
+            self->buildManager_.cancel();
+            return true;
+        }
+        if (e == ftxui::Event::Character('b') && !self->isBuilding_) {
+            auto& mgr = self->buildManager_;
+            if (!mgr.isRunning()) {
+                if (!self->buildDir_.empty() && !self->target_.empty()) {
+                    mgr.build(self->target_);
+                } else if (!self->buildDir_.empty()) {
+                    mgr.build();
+                }
+            }
+            return true;
+        }
+        return false;
+    });
 }
 
 void BuildOverlay::show() {
     visible_ = true;
     logLines_.clear();
     isBuilding_ = false;
+    logLines_.push_back("Build overlay opened. Press 'b' to start build.");
 }
 
 void BuildOverlay::hide() { visible_ = false; }
@@ -60,5 +83,11 @@ void BuildOverlay::toggle() { visible_ = !visible_; }
 
 void BuildOverlay::setBuildDir(const std::string& dir) { buildDir_ = dir; }
 void BuildOverlay::setTarget(const std::string& target) { target_ = target; }
+
+void BuildOverlay::appendLog(const std::string& line) {
+    logLines_.push_back(line);
+}
+
+void BuildOverlay::setBuilding(bool b) { isBuilding_ = b; }
 
 } // namespace lazycmake::tui

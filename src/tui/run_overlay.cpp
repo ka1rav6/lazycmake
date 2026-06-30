@@ -26,13 +26,18 @@ ftxui::Component RunOverlay::build() {
 
         auto log = ftxui::vbox(std::move(logItems)) | ftxui::frame | ftxui::flex;
 
+        auto statusText = self->isRunning_
+            ? ftxui::text("Running...")
+            : ftxui::text("Ready");
+
         auto frame = ftxui::vbox({
             ftxui::text(" Run ") | ftxui::bold | ftxui::center,
             ftxui::separator(),
+            statusText,
             ftxui::text(" Executable: " + self->executable_),
             log,
             ftxui::separator(),
-            ftxui::text(" 'r': run   'esc': close ") | ftxui::center | ftxui::dim,
+            ftxui::text(" 'r': run   'k': kill   'esc': close ") | ftxui::center | ftxui::dim,
         });
 
         return frame | ftxui::border |
@@ -40,13 +45,35 @@ ftxui::Component RunOverlay::build() {
                ftxui::bgcolor(colorFromString(colors.background));
     }));
 
-    return ftxui::Maybe(renderer, &visible_);
+    return ftxui::CatchEvent(ftxui::Maybe(renderer, &visible_), [self](ftxui::Event e) {
+        if (!self->visible_) return false;
+        if (e == ftxui::Event::Escape) {
+            self->hide();
+            return true;
+        }
+        if (e == ftxui::Event::Character('r') && !self->isRunning_) {
+            self->logLines_.clear();
+            self->isRunning_ = true;
+            self->logLines_.push_back("Launching " + self->executable_ + "...");
+            self->runManager_.run(self->executable_, self->args_);
+            self->isRunning_ = false;
+            return true;
+        }
+        if (e == ftxui::Event::Character('k') && self->isRunning_) {
+            self->runManager_.kill();
+            self->logLines_.push_back("Process killed by user.");
+            self->isRunning_ = false;
+            return true;
+        }
+        return false;
+    });
 }
 
 void RunOverlay::show() {
     visible_ = true;
     logLines_.clear();
     isRunning_ = false;
+    logLines_.push_back("Run overlay opened. Press 'r' to run.");
 }
 
 void RunOverlay::hide() { visible_ = false; }

@@ -1,7 +1,9 @@
 #pragma once
 
 #include <functional>
+#include <memory>
 #include <string>
+#include <vector>
 
 #include <ftxui/component/component.hpp>
 
@@ -50,8 +52,8 @@ private:
     // Step 3: Build system
     int generatorIdx_ = 0; // 0=Ninja, 1=Unix Makefiles
 
-    // Step 4: Dependencies (parallel arrays with registry_)
-    int depScrollIdx_ = 0;
+    // Step 4: Dependencies (shared_ptr to avoid memory leaks with FTXUI checkboxes)
+    std::vector<std::shared_ptr<bool>> depChecked_;
 
     // Callbacks
     GenerateCallback onGenerate_;
