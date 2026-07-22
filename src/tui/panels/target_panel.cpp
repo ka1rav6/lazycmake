@@ -14,6 +14,8 @@ TargetPanel::TargetPanel(config::KeymapManager& keymap,
     targets_ = {};
 }
 
+TargetPanel::~TargetPanel() = default;
+
 ftxui::Component TargetPanel::build() {
     auto self = this;
     auto renderer = ftxui::Renderer(std::function<ftxui::Element()>([self] {
@@ -41,7 +43,7 @@ void TargetPanel::setProject(const core::Project& project) {
 }
 
 bool TargetPanel::onEvent(ftxui::Event event) {
-    if (!focused_) return false;
+    if (!focused_ || targets_.empty()) return false;
 
     if (event == ftxui::Event::ArrowDown || event == ftxui::Event::Character('j')) {
         selectedIndex_ = std::min(selectedIndex_ + 1, static_cast<int>(targets_.size()) - 1);

@@ -1,22 +1,6 @@
-#include "lazycmake/tui/panels/file_panel.hpp"
-
-#include <algorithm>
-
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-
-#include "lazycmake/tui/color_helper.hpp"
+#include "lazycmake/tui/panels/panel_base.hpp"
 
 namespace lazycmake::tui {
-
-namespace {
-
-bool shouldSkip(const std::filesystem::path& p) {
-    auto name = p.filename().string();
-    return name.starts_with('.') || name == "build";
-}
-
-} // namespace
 
 FilePanel::FilePanel(config::KeymapManager& keymap,
                      config::ThemeManager& theme)
@@ -24,8 +8,6 @@ FilePanel::FilePanel(config::KeymapManager& keymap,
     // Default dummy list until setProject is called.
     files_ = {};
 }
-
-FilePanel::~FilePanel() = default;
 
 ftxui::Component FilePanel::build() {
     auto self = this;
@@ -38,31 +20,6 @@ ftxui::Component FilePanel::build() {
     });
 
     return wrapped;
-}
-
-void FilePanel::setProject(const core::Project& project) {
-    rootDir_ = project.rootDir;
-    refreshFileList();
-}
-
-void FilePanel::refreshFileList() {
-    files_.clear();
-    if (rootDir_.empty() || !std::filesystem::exists(rootDir_)) return;
-
-    try {
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(rootDir_)) {
-            if (entry.is_regular_file() && !shouldSkip(entry.path())) {
-                files_.push_back(std::filesystem::relative(entry.path(), rootDir_));
-            }
-        }
-    } catch (...) {
-        // Ignore filesystem errors.
-    }
-
-    std::sort(files_.begin(), files_.end());
-    if (selectedIndex_ >= static_cast<int>(files_.size())) {
-        selectedIndex_ = files_.empty() ? 0 : static_cast<int>(files_.size()) - 1;
-    }
 }
 
 bool FilePanel::onEvent(ftxui::Event event) {
@@ -97,7 +54,7 @@ ftxui::Element FilePanel::render() {
             auto text = ftxui::text(prefix + path);
             if (i == static_cast<size_t>(selectedIndex_) && focused_) {
                 items.push_back(text | ftxui::bgcolor(colorFromString(selBg))
-                                       | ftxui::color(colorFromString(selFg)));
+                               | ftxui::color(colorFromString(selFg)));
             } else {
                 items.push_back(text | ftxui::color(colorFromString(fg)));
             }
