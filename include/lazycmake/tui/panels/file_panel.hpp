@@ -15,7 +15,6 @@
 namespace lazycmake::tui {
 
 // File panel — left-most panel showing project file tree.
-// File panel — left-most panel showing project file tree.
 // This panel provides a navigable tree view of project files, allowing users
 // to browse and select files for building and editing operations.
 // 
