@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
+#include <spdlog/spdlog.h>
 #include <regex>
 #include <sstream>
 
@@ -78,8 +78,7 @@ int TemplateManager::discoverFrom(const std::filesystem::path& directory) {
             registerTemplate(std::move(tmpl));
             ++count;
         } catch (const std::exception& e) {
-            std::cerr << "TemplateManager: Error loading template from "
-                      << entry.path() << ": " << e.what() << std::endl;
+            spdlog::warn("TemplateManager: Error loading template from {}: {}", entry.path().string(), e.what());
         }
     }
 

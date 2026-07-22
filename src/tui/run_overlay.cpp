@@ -81,9 +81,7 @@ ftxui::Component RunOverlay::build() {
         }
         if (e == ftxui::Event::Character('r') && !self->isRunning_) {
             self->logLines_.clear();
-            self->isRunning_ = true;
             self->runManager_.run(self->executable_, self->args_);
-            self->isRunning_ = false;
             return true;
         }
         if (e == ftxui::Event::Character('k') && self->isRunning_) {

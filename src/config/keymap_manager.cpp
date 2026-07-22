@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
+#include <spdlog/spdlog.h>
 
 namespace lazycmake::config {
 
@@ -55,7 +55,7 @@ bool KeymapManager::loadString(const std::string& jsonString) {
         }
         return true;
     } catch (const std::exception& e) {
-        std::cerr << "KeymapManager: Failed to load keymap: " << e.what() << std::endl;
+        spdlog::warn("KeymapManager: Failed to load keymap: {}", e.what());
         return false;
     }
 }
@@ -123,8 +123,7 @@ bool KeymapManager::loadLayer(const std::filesystem::path& path) {
         }
         return true;
     } catch (const std::exception& e) {
-        std::cerr << "KeymapManager: Error loading " << path.string()
-                  << ": " << e.what() << std::endl;
+        spdlog::warn("KeymapManager: Error loading {}: {}", path.string(), e.what());
         return false;
     }
 }

@@ -21,6 +21,15 @@ OutputPanel::OutputPanel(config::KeymapManager& keymap,
     };
 }
 
+OutputPanel::~OutputPanel() {
+    if (bus_) {
+        if (runOutputId_) bus_->unsubscribe(runOutputId_);
+        if (buildProgressId_) bus_->unsubscribe(buildProgressId_);
+        if (buildFinishedId_) bus_->unsubscribe(buildFinishedId_);
+        if (runFinishedId_) bus_->unsubscribe(runFinishedId_);
+    }
+}
+
 ftxui::Component OutputPanel::build() {
     auto self = this;
     auto renderer = ftxui::Renderer(std::function<ftxui::Element()>([self] {
@@ -35,13 +44,14 @@ ftxui::Component OutputPanel::build() {
 }
 
 void OutputPanel::connect(events::EventBus& bus) {
-    bus.subscribe<events::RunOutputEvent>([this](const events::RunOutputEvent& e) {
+    bus_ = &bus;
+    runOutputId_ = bus.subscribe<events::RunOutputEvent>([this](const events::RunOutputEvent& e) {
         append("[" + e.stream + "] " + e.line);
     });
-    bus.subscribe<events::BuildProgressEvent>([this](const events::BuildProgressEvent& e) {
+    buildProgressId_ = bus.subscribe<events::BuildProgressEvent>([this](const events::BuildProgressEvent& e) {
         append("[build] " + e.stage + ": " + e.detail);
     });
-    bus.subscribe<events::BuildFinishedEvent>([this](const events::BuildFinishedEvent& e) {
+    buildFinishedId_ = bus.subscribe<events::BuildFinishedEvent>([this](const events::BuildFinishedEvent& e) {
         if (e.success) {
             append("[build] Finished target '" + e.targetName + "' (exit " + std::to_string(e.exitCode) + ")");
         } else {
@@ -51,7 +61,7 @@ void OutputPanel::connect(events::EventBus& bus) {
             append(e.output);
         }
     });
-    bus.subscribe<events::RunFinishedEvent>([this](const events::RunFinishedEvent& e) {
+    runFinishedId_ = bus.subscribe<events::RunFinishedEvent>([this](const events::RunFinishedEvent& e) {
         if (e.success) {
             append("[run] Process exited with code " + std::to_string(e.exitCode));
         } else {
@@ -68,6 +78,7 @@ void OutputPanel::append(const std::string& line) {
 }
 
 bool OutputPanel::onEvent(ftxui::Event event) {
+    if (lines_.empty()) return false;
     if (event == ftxui::Event::PageUp) {
         scrollOffset_ = std::max(0, scrollOffset_ - 10);
         return true;

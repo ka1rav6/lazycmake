@@ -82,7 +82,6 @@ private:
 
     ftxui::Component pendingScreen_;
     bool hasPendingScreen_ = false;
-    bool loopActive_ = false;
 };
 
 } // namespace lazycmake::tui

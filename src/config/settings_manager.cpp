@@ -6,6 +6,8 @@
 #include <functional>
 #include <iostream>
 
+#include <spdlog/spdlog.h>
+
 namespace lazycmake::config {
 
 SettingsManager::SettingsManager() {
@@ -61,7 +63,7 @@ bool SettingsManager::loadString(const std::string& jsonString) {
         mergeJson(j);
         return true;
     } catch (const nlohmann::json::parse_error& e) {
-        std::cerr << "SettingsManager: Failed to parse config string: " << e.what() << std::endl;
+        spdlog::warn("SettingsManager: Failed to parse config string: {}", e.what());
         return false;
     }
 }
@@ -120,7 +122,7 @@ bool SettingsManager::loadLayer(const std::filesystem::path& path) {
 
     std::ifstream file(path);
     if (!file.is_open()) {
-        std::cerr << "SettingsManager: Could not open " << path.string() << std::endl;
+        spdlog::warn("SettingsManager: Could not open {}", path.string());
         return false;
     }
 
@@ -139,12 +141,10 @@ bool SettingsManager::loadLayer(const std::filesystem::path& path) {
 
         return true;
     } catch (const nlohmann::json::parse_error& e) {
-        std::cerr << "SettingsManager: Invalid JSON in " << path.string()
-                  << ": " << e.what() << std::endl;
+        spdlog::warn("SettingsManager: Invalid JSON in {}: {}", path.string(), e.what());
         return false;
     } catch (const nlohmann::json::exception& e) {
-        std::cerr << "SettingsManager: Error reading " << path.string()
-                  << ": " << e.what() << std::endl;
+        spdlog::warn("SettingsManager: Error reading {}: {}", path.string(), e.what());
         return false;
     }
 }
@@ -190,7 +190,7 @@ void SettingsManager::mergeJson(const nlohmann::json& layer) {
     try {
         settings_ = current.get<AppSettings>();
     } catch (const nlohmann::json::exception& e) {
-        std::cerr << "SettingsManager: Merge result is invalid: " << e.what() << std::endl;
+        spdlog::warn("SettingsManager: Merge result is invalid: {}", e.what());
     }
 }
 

@@ -2,7 +2,8 @@
 
 #include <filesystem>
 #include <fstream>
-#include <iostream>
+
+#include <spdlog/spdlog.h>
 
 namespace lazycmake::config {
 
@@ -37,7 +38,7 @@ int ThemeManager::loadAll() {
 bool ThemeManager::loadFile(const std::filesystem::path& path) {
     std::ifstream file(path);
     if (!file.is_open()) {
-        std::cerr << "ThemeManager: Could not open " << path.string() << std::endl;
+        spdlog::warn("ThemeManager: Could not open {}", path.string());
         return false;
     }
 
@@ -54,8 +55,7 @@ bool ThemeManager::loadFile(const std::filesystem::path& path) {
         registerTheme(std::move(theme));
         return true;
     } catch (const std::exception& e) {
-        std::cerr << "ThemeManager: Error loading " << path.string()
-                  << ": " << e.what() << std::endl;
+        spdlog::warn("ThemeManager: Error loading {}: {}", path.string(), e.what());
         return false;
     }
 }
@@ -70,7 +70,7 @@ bool ThemeManager::loadString(const std::string& jsonString, const std::string& 
         registerTheme(std::move(theme));
         return true;
     } catch (const std::exception& e) {
-        std::cerr << "ThemeManager: Failed to load theme: " << e.what() << std::endl;
+        spdlog::warn("ThemeManager: Failed to load theme: {}", e.what());
         return false;
     }
 }
@@ -80,7 +80,7 @@ bool ThemeManager::setActiveTheme(const std::string& name) {
         activeThemeName_ = name;
         return true;
     }
-    std::cerr << "ThemeManager: Theme '" << name << "' not found" << std::endl;
+    spdlog::warn("ThemeManager: Theme '{}' not found", name);
     return false;
 }
 

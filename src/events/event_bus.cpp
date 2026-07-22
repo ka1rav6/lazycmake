@@ -1,7 +1,8 @@
 #include "lazycmake/events/event_bus.hpp"
 
 #include <algorithm>
-#include <iostream>
+
+#include <spdlog/spdlog.h>
 
 namespace lazycmake::events {
 
@@ -62,8 +63,7 @@ void EventBus::dispatch(const Event& event) {
             try {
                 handler.handler(event);
             } catch (const std::exception& e) {
-                std::cerr << "EventBus: Handler " << handler.id
-                          << " threw: " << e.what() << std::endl;
+                spdlog::warn("EventBus: Handler {} threw: {}", handler.id, e.what());
             }
         }
     }

@@ -71,11 +71,15 @@ ftxui::Component Application::makeStartupScreen() {
                ftxui::bgcolor(colorFromString(colors.background)) |
                ftxui::color(colorFromString(colors.foreground));
     });
-    styled->Add(menu);
-
     return ftxui::CatchEvent(styled, [self, items, selected](ftxui::Event e) {
         if (e == ftxui::Event::Character('q')) {
             self->screen_.Exit();
+            return true;
+        }
+        if (e == ftxui::Event::Character('h')) {
+            if (self->overlayState_ && self->overlayState_->helpOverlay) {
+                self->overlayState_->helpOverlay->toggle();
+            }
             return true;
         }
         if (e == ftxui::Event::Character('j') ||
@@ -101,6 +105,9 @@ void Application::onStartupAction(int idx) {
     switch (idx) {
         case 0: navigateToWizard(); break;
         case 1: navigateToOpen(); break;
+        case 2:
+            spdlog::info("Startup: Recent Projects not yet implemented");
+            break;
         case 3: navigateToTemplates(); break;
         case 4: navigateToSettings(); break;
         case 5: screen_.Exit(); break;
@@ -110,10 +117,7 @@ void Application::onStartupAction(int idx) {
 void Application::scheduleScreen(ftxui::Component screen) {
     pendingScreen_ = std::move(screen);
     hasPendingScreen_ = true;
-    if (loopActive_) {
-        spdlog::debug("Screen: scheduled transition, exiting loop");
-        screen_.Exit();
-    }
+    screen_.Post([this] { applyPendingScreen(); });
 }
 
 void Application::setScreen(ftxui::Component screen) {
@@ -121,13 +125,7 @@ void Application::setScreen(ftxui::Component screen) {
 
     screenRoot_->DetachAllChildren();
 
-    auto drainer = ftxui::Renderer([this] {
-        eventBus_.drainQueue();
-        return ftxui::emptyElement();
-    });
-
     auto stacked = ftxui::Container::Stacked({
-        std::move(drainer),
         std::move(screen),
     });
 
@@ -234,7 +232,6 @@ void Application::navigateToOpen() {
                    ftxui::color(colorFromString(colors.foreground));
         }),
     });
-    container->Add(menu);
 
     auto component = ftxui::CatchEvent(container, [self, entryPaths, selected](ftxui::Event e) {
         if (e == ftxui::Event::Character('q') || e == ftxui::Event::Escape) {
@@ -297,10 +294,11 @@ void Application::navigateToWorkspace(core::Project project) {
 
     auto buildOverlay = std::make_shared<BuildOverlay>(
         eventBus_, keymap_, theme_, buildManager_);
+    buildOverlay->setBuildDir(project.rootDir.string());
     auto runOverlay = std::make_shared<RunOverlay>(
         eventBus_, keymap_, theme_, runManager_);
     auto depDialog = std::make_shared<DependencyDialog>(
-        keymap_, theme_, dependencyRegistry_, project_);
+        keymap_, theme_, dependencyRegistry_, project);
     auto conflictDialog = std::make_shared<ConflictDialog>(
         keymap_, theme_);
     auto helpOverlay = std::make_shared<HelpOverlay>(keymap_);
@@ -312,8 +310,8 @@ void Application::navigateToWorkspace(core::Project project) {
     workspace->setOnBuild([self, buildOverlay] {
         buildOverlay->toggle();
     });
-    workspace->setOnRun([self, runOverlay] {
-        runOverlay->setExecutable("./build/" + self->project_.name);
+    workspace->setOnRun([self, runOverlay, projectName = project.name] {
+        runOverlay->setExecutable("./build/" + projectName);
         runOverlay->toggle();
     });
     workspace->setOnDeps([self, depDialog] {
@@ -431,26 +429,22 @@ void Application::drainEventQueue() {
 }
 
 int Application::run(int /*argc*/, char** /*argv*/) {
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::warn);
     loadConfig();
 
-    screenRoot_ = ftxui::Container::Vertical({});
+    auto drainer = ftxui::Renderer([this] {
+        eventBus_.drainQueue();
+        return ftxui::emptyElement();
+    });
 
-    loopActive_ = false;
+    screenRoot_ = ftxui::Container::Vertical({
+        drainer,
+    });
+
     navigateToStartup();
     applyPendingScreen();
 
-    loopActive_ = true;
-    while (true) {
-        screen_.Loop(screenRoot_);
-        if (hasPendingScreen_) {
-            applyPendingScreen();
-        } else {
-            break;
-        }
-    }
-    loopActive_ = false;
-
+    screen_.Loop(screenRoot_);
     return 0;
 }
 

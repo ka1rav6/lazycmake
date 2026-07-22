@@ -77,7 +77,7 @@ int DependencyRegistry::loadBuiltin() {
         "https://github.com/skypjack/entt.git", "v3.14.0",
         {"EnTT::EnTT"}, {"gaming", "ecs"});
 
-    spdlog::info("DependencyRegistry: loaded {} built-in presets", presets_.size());
+    spdlog::debug("DependencyRegistry: loaded {} built-in presets", presets_.size());
     return static_cast<int>(presets_.size());
 }
 
