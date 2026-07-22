@@ -21,15 +21,6 @@ OutputPanel::OutputPanel(config::KeymapManager& keymap,
     };
 }
 
-OutputPanel::~OutputPanel() {
-    if (bus_) {
-        if (runOutputId_) bus_->unsubscribe(runOutputId_);
-        if (buildProgressId_) bus_->unsubscribe(buildProgressId_);
-        if (buildFinishedId_) bus_->unsubscribe(buildFinishedId_);
-        if (runFinishedId_) bus_->unsubscribe(runFinishedId_);
-    }
-}
-
 ftxui::Component OutputPanel::build() {
     auto self = this;
     auto renderer = ftxui::Renderer(std::function<ftxui::Element()>([self] {

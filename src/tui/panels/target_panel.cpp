@@ -14,8 +14,6 @@ TargetPanel::TargetPanel(config::KeymapManager& keymap,
     targets_ = {};
 }
 
-TargetPanel::~TargetPanel() = default;
-
 ftxui::Component TargetPanel::build() {
     auto self = this;
     auto renderer = ftxui::Renderer(std::function<ftxui::Element()>([self] {

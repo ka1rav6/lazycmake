@@ -31,8 +31,6 @@ public:
     explicit TargetPanel(config::KeymapManager& keymap,
                          config::ThemeManager& theme);
 
-    virtual ~TargetPanel() = default;
-    
     ftxui::Component build() override;
     void focus() override { focused_ = true; }
     void blur() override { focused_ = false; }

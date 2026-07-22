@@ -30,9 +30,6 @@ public:
     explicit FilePanel(config::KeymapManager& keymap,
                        config::ThemeManager& theme);
 
-    // Explicit virtual destructor for proper cleanup of dynamically allocated panels
-    virtual ~FilePanel() = default;
-    
     ftxui::Component build() override;
     void focus() override { focused_ = true; }
     void blur() override { focused_ = false; }

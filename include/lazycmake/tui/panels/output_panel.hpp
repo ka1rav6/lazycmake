@@ -33,8 +33,6 @@ public:
     explicit OutputPanel(config::KeymapManager& keymap,
                          config::ThemeManager& theme);
 
-    virtual ~OutputPanel() = default;
-
     ftxui::Component build() override;
     void focus() override { focused_ = true; }
     void blur() override { focused_ = false; }

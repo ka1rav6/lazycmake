@@ -25,8 +25,6 @@ FilePanel::FilePanel(config::KeymapManager& keymap,
     files_ = {};
 }
 
-FilePanel::~FilePanel() = default;
-
 ftxui::Component FilePanel::build() {
     auto self = this;
     auto renderer = ftxui::Renderer(std::function<ftxui::Element()>([self] {
