@@ -32,6 +32,7 @@ class OutputPanel : public PanelBase {
 public:
     explicit OutputPanel(config::KeymapManager& keymap,
                          config::ThemeManager& theme);
+    ~OutputPanel() override;
 
     ftxui::Component build() override;
     void focus() override { focused_ = true; }
