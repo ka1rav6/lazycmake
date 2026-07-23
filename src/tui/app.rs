@@ -1,17 +1,16 @@
-use std::sync::atomic::Ordering;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
-use ratatui::layout::{Constraint, Direction, Layout, Rect};
+use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::style::{Color, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph, Wrap};
+use ratatui::widgets::{Block, List, ListItem, Paragraph};
 use ratatui::Frame;
 
 use crate::build::{BuildManager, BuildStage};
 use crate::config::{KeymapManager, SettingsManager, ThemeManager};
-use crate::event::{BuildFinishedEvent, Event as AppEvent, EventBus, RunFinishedEvent, RunOutputEvent};
+use crate::event::{Event as AppEvent, EventBus};
 use crate::run::RunManager;
 use crate::tui::workspace;
 
@@ -32,7 +31,7 @@ pub struct TuiApplication {
     pub should_quit: bool,
 
     // Workspace state
-    pub output_lines: Vec<String>,
+    pub output_lines: Arc<Mutex<Vec<String>>>,
     pub build_overlay_visible: bool,
     pub run_overlay_visible: bool,
     pub help_overlay_visible: bool,
@@ -40,7 +39,7 @@ pub struct TuiApplication {
     pub run_log_lines: Vec<String>,
     pub is_building: bool,
     pub is_running: bool,
-    pub active_panel: usize, // 0=files, 1=targets, 2=output
+    pub active_panel: usize,
 
     // Startup menu
     pub startup_selected: usize,
@@ -54,7 +53,7 @@ impl TuiApplication {
             BuildManager::new(Box::new(crate::build::FakeBuildBackend::new(true)), event_bus.clone());
         let run_manager = RunManager::new(event_bus.clone());
 
-        let mut app = Self {
+        let app = Self {
             event_bus: event_bus.clone(),
             build_manager,
             run_manager,
@@ -63,12 +62,12 @@ impl TuiApplication {
             settings: SettingsManager::default(),
             screen: Screen::Startup,
             should_quit: false,
-            output_lines: vec![
+            output_lines: Arc::new(Mutex::new(vec![
                 "Welcome to LazyCMake!".into(),
                 "".into(),
                 "This is the Output panel.".into(),
                 "Build and run output will appear here.".into(),
-            ],
+            ])),
             build_overlay_visible: false,
             run_overlay_visible: false,
             help_overlay_visible: false,
@@ -90,64 +89,54 @@ impl TuiApplication {
         app
     }
 
-    pub fn setup_subscriptions(&mut self) {
-        let lines = self.output_lines.clone();
-        let output = Arc::new(std::sync::Mutex::new(lines));
+    pub fn setup_subscriptions(&self) {
+        let out = self.output_lines.clone();
 
-        {
-            let out = output.clone();
-            let ol = self.output_lines.clone();
-            self.event_bus.subscribe("RunOutput", {
-                move |e: &AppEvent| {
-                    if let AppEvent::RunOutput(ev) = e {
-                        let mut o = out.lock().unwrap();
-                        o.push(format!("[{}] {}", ev.stream, ev.line));
+        self.event_bus.subscribe("RunOutput", {
+            let out = out.clone();
+            move |e: &AppEvent| {
+                if let AppEvent::RunOutput(ev) = e {
+                    out.lock().unwrap().push(format!("[{}] {}", ev.stream, ev.line));
+                }
+            }
+        });
+
+        self.event_bus.subscribe("BuildFinished", {
+            let out = out.clone();
+            move |e: &AppEvent| {
+                if let AppEvent::BuildFinished(ev) = e {
+                    let mut o = out.lock().unwrap();
+                    if ev.success {
+                        o.push(format!(
+                            "[build] Finished target '{}' (exit {})",
+                            ev.target_name, ev.exit_code
+                        ));
+                    } else {
+                        o.push(format!(
+                            "[build] FAILED target '{}' (exit {})",
+                            ev.target_name, ev.exit_code
+                        ));
                     }
                 }
-            });
-        }
+            }
+        });
 
-        {
-            let out = output.clone();
-            self.event_bus.subscribe("BuildFinished", {
-                move |e: &AppEvent| {
-                    if let AppEvent::BuildFinished(ev) = e {
-                        let mut o = out.lock().unwrap();
-                        if ev.success {
-                            o.push(format!(
-                                "[build] Finished target '{}' (exit {})",
-                                ev.target_name, ev.exit_code
-                            ));
-                        } else {
-                            o.push(format!(
-                                "[build] FAILED target '{}' (exit {})",
-                                ev.target_name, ev.exit_code
-                            ));
-                        }
+        self.event_bus.subscribe("RunFinished", {
+            move |e: &AppEvent| {
+                if let AppEvent::RunFinished(ev) = e {
+                    let mut o = out.lock().unwrap();
+                    if ev.success {
+                        o.push(format!("[run] Process exited with code {}", ev.exit_code));
+                    } else {
+                        o.push(format!("[run] Process failed with code {}", ev.exit_code));
                     }
                 }
-            });
-        }
-
-        {
-            let out = output.clone();
-            self.event_bus.subscribe("RunFinished", {
-                move |e: &AppEvent| {
-                    if let AppEvent::RunFinished(ev) = e {
-                        let mut o = out.lock().unwrap();
-                        if ev.success {
-                            o.push(format!("[run] Process exited with code {}", ev.exit_code));
-                        } else {
-                            o.push(format!("[run] Process failed with code {}", ev.exit_code));
-                        }
-                    }
-                }
-            });
-        }
+            }
+        });
     }
 
     pub fn run(&mut self) -> color_eyre::Result<()> {
-        color_eyre::install()?;
+        let _ = color_eyre::install();
         let mut terminal = ratatui::init();
         terminal.clear()?;
 
@@ -171,7 +160,6 @@ impl TuiApplication {
     }
 
     fn render_startup(&self, frame: &mut Frame) {
-        let colors = self.theme_manager.active_colors();
         let items: Vec<ListItem> = self
             .startup_items
             .iter()
@@ -225,25 +213,18 @@ impl TuiApplication {
         let colors = self.theme_manager.active_colors();
         let area = frame.area();
 
-        // Update output lines from shared buffer
-        {
-            // Lines are appended via event handlers, already in self.output_lines
-        }
+        // Read output lines from shared event-bus buffer
+        let output_snapshot: Vec<String> = self.output_lines.lock().unwrap().clone();
 
-        // Three panels horizontally
         let panel_layout = Layout::default()
             .direction(Direction::Horizontal)
             .constraints([Constraint::Percentage(33), Constraint::Percentage(33), Constraint::Percentage(34)])
             .split(area);
 
-        // File panel
         workspace::render_file_panel(frame, panel_layout[0], self.active_panel == 0, &colors);
-        // Target panel
         workspace::render_target_panel(frame, panel_layout[1], self.active_panel == 1, &colors);
-        // Output panel
-        workspace::render_output_panel(frame, panel_layout[2], self.active_panel == 2, &colors, &self.output_lines);
+        workspace::render_output_panel(frame, panel_layout[2], self.active_panel == 2, &colors, &output_snapshot);
 
-        // Overlays on top
         let full = area;
         if self.build_overlay_visible {
             workspace::render_build_overlay(frame, full, &self.build_log_lines, self.build_manager.current_stage(), self.is_building, &colors);
@@ -284,9 +265,9 @@ impl TuiApplication {
                 }
                 KeyCode::Enter => {
                     match self.startup_selected {
-                        0 => { /* New Project - just go to workspace */ }
-                        1 => { /* Open Project - go to workspace */ }
-                        2 => { /* Settings */ }
+                        0 => {}
+                        1 => {}
+                        2 => {}
                         3 => self.should_quit = true,
                         _ => {}
                     }

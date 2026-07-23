@@ -276,10 +276,10 @@ impl BuildManager {
         let bus = self.event_bus.clone();
         let stage = self.stage.clone();
         let cancel = self.cancel_requested.clone();
-        let sd = source_dir.to_string();
+        let _sd = source_dir.to_string();
         let bd = build_dir.to_string();
-        let gen_name = generator.to_string();
-        let bt = build_type.to_string();
+        let _gen_name = generator.to_string();
+        let _bt = build_type.to_string();
 
         let join = thread::spawn(move || {
             if cancel.load(Ordering::SeqCst) {
