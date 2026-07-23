@@ -142,9 +142,13 @@ void Application::applyPendingScreen() {
 
 void Application::navigateToStartup() {
     spdlog::info("Screen: navigating to startup");
-    screenState_.reset();
-    overlayState_.reset();
-    scheduleScreen(makeStartupScreen());
+    // Fix #10: defer destruction via Post() to avoid self-destruction
+    // during a callback owned by the object being destroyed.
+    screen_.Post([this] {
+        screenState_.reset();
+        overlayState_.reset();
+        scheduleScreen(makeStartupScreen());
+    });
 }
 
 void Application::navigateToWizard() {
@@ -381,7 +385,8 @@ void Application::onGenerateProject(core::Project project) {
 
         auto conflict = fileLock.checkConflict(relPath, content);
         if (conflict.hasConflict) {
-            spdlog::warn("  Conflict detected for {}, overwriting", relPath.generic_string());
+            spdlog::warn("  Conflict detected for {}, skipping (use conflict dialog in workspace to resolve)", relPath.generic_string());
+            continue;
         }
 
         std::ofstream outFile(fullPath);
@@ -431,6 +436,12 @@ void Application::drainEventQueue() {
 int Application::run(int /*argc*/, char** /*argv*/) {
     spdlog::set_level(spdlog::level::warn);
     loadConfig();
+
+    // Fix #7: wire the EventBus to wake the FTXUI screen after thread-safe
+    // publishes so the UI repaints with streamed output.
+    eventBus_.setOnEventQueued([this] {
+        screen_.Post([]{});  // wake the event loop to drain the queue
+    });
 
     auto drainer = ftxui::Renderer([this] {
         eventBus_.drainQueue();

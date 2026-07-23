@@ -77,13 +77,10 @@ private:
 
     ftxui::Component screenRoot_;
 
-    // Layout component for all screens and overlays
-    // This is the root component that manages the entire TUI application state
     std::unique_ptr<Screen> screenState_;
-
-    // Collection of overlays (BuildOverlay, RunOverlay, DependencyDialog, etc.)
-    // These are stacked on top of the current screen
     std::unique_ptr<OverlayState> overlayState_;
+
+
 
     // Pending screen for smooth transitions
     ftxui::Component pendingScreen_;
