@@ -18,10 +18,6 @@ std::string toString(RunState state) {
     return "Unknown";
 }
 
-// ==========================================================================
-// FakeRunBackend
-// ==========================================================================
-
 FakeRunBackend::FakeRunBackend(bool shouldSucceed, int exitCode)
     : shouldSucceed_(shouldSucceed)
     , exitCode_(exitCode) {}
@@ -37,14 +33,11 @@ bool FakeRunBackend::launch(const std::string& executablePath,
     launched_ = true;
     killed_ = false;
 
-    // Simulate streaming some output.
     if (outputCallback_) {
         outputCallback_("stdout", "Launching " + executablePath + "...");
         outputCallback_("stdout", "Running with " + std::to_string(args.size()) + " argument(s)");
     }
 
-    // Always return true from launch (the process was started successfully).
-    // Whether it succeeds at runtime is determined by wait().
     return true;
 }
 
@@ -67,7 +60,6 @@ RunResult FakeRunBackend::wait(int /*timeoutMs*/) {
         };
     }
 
-    // Simulate a small delay.
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
     if (outputCallback_) {
@@ -101,15 +93,16 @@ int FakeRunBackend::pid() const {
     return launched_ ? 12345 : -1;
 }
 
-// ==========================================================================
-// RunManager
-// ==========================================================================
-
 RunManager::RunManager(events::EventBus& eventBus)
     : eventBus_(eventBus)
     , backend_(std::make_unique<FakeRunBackend>()) {}
 
+RunManager::~RunManager() {
+    kill();
+}
+
 void RunManager::setBackend(std::unique_ptr<IRunBackend> backend) {
+    kill();
     backend_ = std::move(backend);
 }
 
@@ -122,18 +115,29 @@ void RunManager::run(const std::string& executablePath,
         return;
     }
 
+    cancelRequested_ = false;
+    workThread_ = std::thread([this, executablePath, args, workingDir, envVars]() {
+        doRun(executablePath, args, workingDir, envVars);
+    });
+}
+
+void RunManager::doRun(const std::string& executablePath,
+                        const std::vector<std::string>& args,
+                        const std::string& workingDir,
+                        const std::vector<std::string>& envVars) {
+    if (cancelRequested_) return;
+
     transitionTo(RunState::Launching);
 
-    eventBus_.publish(events::RunStartedEvent{
+    eventBus_.publishThreadSafe(events::RunStartedEvent{
         .targetName = executablePath,
         .executablePath = executablePath,
     });
 
-    // Set up the output callback to stream to EventBus.
     bool launched = backend_->launch(
         executablePath, args, workingDir, envVars,
         [this](const std::string& stream, const std::string& line) {
-            eventBus_.publish(events::RunOutputEvent{
+            eventBus_.publishThreadSafe(events::RunOutputEvent{
                 .stream = stream,
                 .line = line,
             });
@@ -150,34 +154,39 @@ void RunManager::run(const std::string& executablePath,
         };
         lastResult_ = result;
 
-        eventBus_.publish(events::RunFinishedEvent{
+        eventBus_.publishThreadSafe(events::RunFinishedEvent{
             .success = false,
             .exitCode = -1,
         });
         return;
     }
 
+    if (cancelRequested_) return;
+
     transitionTo(RunState::Running);
 
-    // Wait for completion (in a real implementation, this would be async
-    // using reproc with a background thread + EventBus::publishThreadSafe).
-    // For now, we synchronously wait.
     RunResult result = backend_->wait(/*timeoutMs=*/0);
     lastResult_ = result;
 
-    transitionTo(result.success ? RunState::Finished : RunState::Killed);
+    // Fix #5: always transition to Finished after wait(). Killed is only
+    // set by the explicit kill() path, never from a failed exit code.
+    transitionTo(RunState::Finished);
 
-    eventBus_.publish(events::RunFinishedEvent{
+    eventBus_.publishThreadSafe(events::RunFinishedEvent{
         .success = result.success,
         .exitCode = result.exitCode,
     });
 }
 
 void RunManager::kill() {
-    if (backend_ && isRunning()) {
+    cancelRequested_ = true;
+    if (backend_) {
         backend_->kill();
-        transitionTo(RunState::Killed);
     }
+    if (workThread_.joinable()) {
+        workThread_.join();
+    }
+    transitionTo(RunState::Killed);
 }
 
 RunState RunManager::currentState() const {
@@ -190,6 +199,12 @@ bool RunManager::isRunning() const {
 
 const RunResult& RunManager::lastResult() const {
     return lastResult_;
+}
+
+void RunManager::waitForCompletion() {
+    if (workThread_.joinable()) {
+        workThread_.join();
+    }
 }
 
 void RunManager::transitionTo(RunState newState) {
