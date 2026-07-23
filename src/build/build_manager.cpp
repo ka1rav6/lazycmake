@@ -36,28 +36,15 @@ void BuildManager::configure(const std::string& sourceDir,
         return;
     }
 
-    // Store parameters for potential automatic re-configure.
     sourceDir_ = sourceDir;
     buildDir_ = buildDir;
     generator_ = generator;
     buildType_ = buildType;
 
-    transitionTo(BuildStage::Configuring);
-    emitProgress("Configuring", 0, "Running cmake configure...");
-
-    // Start the configure operation.
-    std::vector<std::string> options;
-    if (!buildType_.empty()) {
-        options.push_back("-DCMAKE_BUILD_TYPE=" + buildType_);
-    }
-    options.push_back("-G" + generator_);
-
-    currentHandle_ = backend_->configure(sourceDir_, buildDir_, options);
-
-    // In a real implementation, this would be async. For now, we
-    // synchronously wait and process the result. A future Phase 6
-    // enhancement would make this truly async using reproc + threads.
-    onConfigureComplete(std::move(currentHandle_));
+    cancelRequested_ = false;
+    workThread_ = std::thread([this, sourceDir, buildDir, generator, buildType]() {
+        doConfigure(sourceDir, buildDir, generator, buildType);
+    });
 }
 
 void BuildManager::build(const std::string& target) {
@@ -66,32 +53,31 @@ void BuildManager::build(const std::string& target) {
         return;
     }
 
-    // If we have configure parameters and the state is Idle, run configure
-    // first (if autoConfigure is enabled — this is checked by the caller).
-    // For now, we go directly to building and assume the project is
-    // already configured.
+    lastTarget_ = target;
 
-    transitionTo(BuildStage::Building);
-    emitProgress("Building", 0,
-                  target.empty() ? "Building all targets..." : "Building " + target + "...");
-
-    currentHandle_ = backend_->build(buildDir_, target);
-
-    // Synchronous wait for now (async in future).
-    onBuildComplete(std::move(currentHandle_));
+    cancelRequested_ = false;
+    workThread_ = std::thread([this, target]() {
+        if (stage_ == BuildStage::Idle &&
+            !sourceDir_.empty() && !buildDir_.empty()) {
+            doConfigure(sourceDir_, buildDir_, generator_, buildType_);
+            if (cancelRequested_ || stage_ == BuildStage::Failed) return;
+        }
+        doBuild(target);
+    });
 }
 
 void BuildManager::cancel() {
+    cancelRequested_ = true;
+    if (currentHandle_) {
+        currentHandle_->cancel();
+    }
+    if (workThread_.joinable()) {
+        workThread_.join();
+    }
+    currentHandle_.reset();
     if (isRunning()) {
-        if (currentHandle_) {
-            currentHandle_->cancel();
-            // Wait briefly for cancellation.
-            currentHandle_->wait(std::chrono::milliseconds(100));
-            currentHandle_.reset();
-        }
         transitionTo(BuildStage::Idle);
     }
-    // If we're in a terminal state (Succeeded, Failed, Idle), cancel is a no-op.
 }
 
 BuildStage BuildManager::currentStage() const {
@@ -110,22 +96,91 @@ const BuildResult& BuildManager::lastResult() const {
 }
 
 void BuildManager::reset() {
-    if (isRunning()) {
-        cancel();
-    }
+    cancel();
     stage_ = BuildStage::Idle;
     lastResult_ = BuildResult{};
 }
 
 void BuildManager::setBackend(std::unique_ptr<IBuildBackend> backend) {
+    cancel();
     backend_ = std::move(backend);
+}
+
+void BuildManager::setConfigureParams(const std::string& sourceDir,
+                                       const std::string& buildDir,
+                                       const std::string& generator,
+                                       const std::string& buildType) {
+    sourceDir_ = sourceDir;
+    buildDir_ = buildDir;
+    generator_ = generator;
+    buildType_ = buildType;
+}
+
+void BuildManager::waitForCompletion() {
+    if (workThread_.joinable()) {
+        workThread_.join();
+    }
 }
 
 void BuildManager::transitionTo(BuildStage newStage) {
     stage_ = newStage;
 }
 
+void BuildManager::doConfigure(const std::string& sourceDir,
+                                const std::string& buildDir,
+                                const std::string& generator,
+                                const std::string& buildType) {
+    if (cancelRequested_) return;
+
+    transitionTo(BuildStage::Configuring);
+    emitProgress("Configuring", 0, "Running cmake configure...");
+
+    std::vector<std::string> options;
+    if (!buildType.empty()) {
+        options.push_back("-DCMAKE_BUILD_TYPE=" + buildType);
+    }
+    options.push_back("-G" + generator);
+
+    auto handle = backend_->configure(sourceDir, buildDir, options);
+    if (cancelRequested_) return;
+
+    handle->onOutput([this](const std::string& stream, const std::string& line) {
+        eventBus_.publishThreadSafe(events::BuildProgressEvent{
+            .stage = stream == "stderr" ? "Configuring" : "Configuring",
+            .percentComplete = -1,
+            .detail = line,
+        });
+    });
+
+    currentHandle_ = std::move(handle);
+    onConfigureComplete(std::move(currentHandle_));
+}
+
+void BuildManager::doBuild(const std::string& target) {
+    if (cancelRequested_) return;
+
+    transitionTo(BuildStage::Building);
+    emitProgress("Building", 0,
+                  target.empty() ? "Building all targets..." : "Building " + target + "...");
+
+    auto handle = backend_->build(buildDir_, target);
+    if (cancelRequested_) return;
+
+    handle->onOutput([this](const std::string& stream, const std::string& line) {
+        eventBus_.publishThreadSafe(events::BuildProgressEvent{
+            .stage = stream == "stderr" ? "Building" : "Building",
+            .percentComplete = -1,
+            .detail = line,
+        });
+    });
+
+    currentHandle_ = std::move(handle);
+    onBuildComplete(std::move(currentHandle_));
+}
+
 void BuildManager::onConfigureComplete(std::unique_ptr<BuildHandle> handle) {
+    if (cancelRequested_) return;
+
     BuildResult result = handle->wait();
     lastResult_ = result;
 
@@ -133,15 +188,10 @@ void BuildManager::onConfigureComplete(std::unique_ptr<BuildHandle> handle) {
         transitionTo(BuildStage::Generating);
         emitProgress("Generating", 50, "Configuration succeeded, generating...");
 
-        // In a full implementation, we'd run the CMake generator here
-        // (ModernCMakeGenerator). For now, we just emit a progress event
-        // and move to the next stage.
-
         transitionTo(BuildStage::Succeeded);
         emitProgress("Succeeded", 100, "Configuration complete");
 
-        // Publish the success event.
-        eventBus_.publish(events::ConfigureFinishedEvent{
+        eventBus_.publishThreadSafe(events::ConfigureFinishedEvent{
             .success = true,
             .output = result.output,
             .errorMsg = {},
@@ -150,7 +200,7 @@ void BuildManager::onConfigureComplete(std::unique_ptr<BuildHandle> handle) {
         transitionTo(BuildStage::Failed);
         emitProgress("Failed", 100, "Configuration failed: " + result.errorMsg);
 
-        eventBus_.publish(events::ConfigureFinishedEvent{
+        eventBus_.publishThreadSafe(events::ConfigureFinishedEvent{
             .success = false,
             .output = result.output,
             .errorMsg = result.errorMsg,
@@ -159,6 +209,8 @@ void BuildManager::onConfigureComplete(std::unique_ptr<BuildHandle> handle) {
 }
 
 void BuildManager::onBuildComplete(std::unique_ptr<BuildHandle> handle) {
+    if (cancelRequested_) return;
+
     BuildResult result = handle->wait();
     lastResult_ = result;
 
@@ -166,9 +218,9 @@ void BuildManager::onBuildComplete(std::unique_ptr<BuildHandle> handle) {
         transitionTo(BuildStage::Succeeded);
         emitProgress("Succeeded", 100, "Build complete");
 
-        eventBus_.publish(events::BuildFinishedEvent{
+        eventBus_.publishThreadSafe(events::BuildFinishedEvent{
             .success = true,
-            .targetName = {},
+            .targetName = lastTarget_,
             .exitCode = result.exitCode,
             .output = result.output,
         });
@@ -176,9 +228,9 @@ void BuildManager::onBuildComplete(std::unique_ptr<BuildHandle> handle) {
         transitionTo(BuildStage::Idle);
         emitProgress("Cancelled", 0, "Build cancelled");
 
-        eventBus_.publish(events::BuildFinishedEvent{
+        eventBus_.publishThreadSafe(events::BuildFinishedEvent{
             .success = false,
-            .targetName = {},
+            .targetName = lastTarget_,
             .exitCode = -1,
             .output = "Build was cancelled",
         });
@@ -186,9 +238,9 @@ void BuildManager::onBuildComplete(std::unique_ptr<BuildHandle> handle) {
         transitionTo(BuildStage::Failed);
         emitProgress("Failed", 100, "Build failed: " + result.errorMsg);
 
-        eventBus_.publish(events::BuildFinishedEvent{
+        eventBus_.publishThreadSafe(events::BuildFinishedEvent{
             .success = false,
-            .targetName = {},
+            .targetName = lastTarget_,
             .exitCode = result.exitCode,
             .output = result.output,
         });
@@ -197,7 +249,7 @@ void BuildManager::onBuildComplete(std::unique_ptr<BuildHandle> handle) {
 
 void BuildManager::emitProgress(const std::string& stage, int percent,
                                  const std::string& detail) {
-    eventBus_.publish(events::BuildProgressEvent{
+    eventBus_.publishThreadSafe(events::BuildProgressEvent{
         .stage = stage,
         .percentComplete = percent,
         .detail = detail,
