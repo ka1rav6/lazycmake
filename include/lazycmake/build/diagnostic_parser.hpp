@@ -16,6 +16,10 @@ struct Diagnostic {
     std::string rawLine;
 };
 
+// TODO(#issue): not yet wired — this parser is built but never called.
+// Intended usage: wire into BuildManager's onOutput callback to parse
+// compiler diagnostics line-by-line and publish DiagnosticEvents for
+// a future error-panel component.
 class DiagnosticParser {
 public:
     explicit DiagnosticParser(bool enableColor = false);
