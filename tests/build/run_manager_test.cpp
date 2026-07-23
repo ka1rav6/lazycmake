@@ -1,19 +1,3 @@
-// ==========================================================================
-// RunManager tests
-//
-// Tests use FakeRunBackend to verify state machine transitions without
-// running real processes.
-//
-// Tests cover:
-//   - Initial state is Idle
-//   - Successful run transitions to Finished
-//   - Failed run transitions correctly
-//   - Kill during run transitions to Killed
-//   - Run emits output events
-//   - Run result is populated after completion
-//   - Cannot start a run while already running
-// ==========================================================================
-
 #include <catch2/catch_test_macros.hpp>
 
 #include "lazycmake/build/run_manager.hpp"
@@ -40,6 +24,7 @@ TEST_CASE("Successful run transitions to Finished", "[build][run_manager]") {
 
     fix.mgr.setBackend(std::make_unique<FakeRunBackend>(true, 0));
     fix.mgr.run("/usr/bin/my_app", {"arg1", "arg2"}, "/tmp", {});
+    fix.mgr.waitForCompletion();
 
     CHECK(fix.mgr.currentState() == RunState::Finished);
 }
@@ -49,6 +34,7 @@ TEST_CASE("Failed run captures the error", "[build][run_manager]") {
 
     fix.mgr.setBackend(std::make_unique<FakeRunBackend>(false, 1));
     fix.mgr.run("/usr/bin/failing_app");
+    fix.mgr.waitForCompletion();
 
     CHECK_FALSE(fix.mgr.lastResult().success);
     CHECK(fix.mgr.lastResult().exitCode == 1);
@@ -65,6 +51,8 @@ TEST_CASE("Run emits RunStartedEvent and RunFinishedEvent", "[build][run_manager
 
     fix.mgr.setBackend(std::make_unique<FakeRunBackend>(true, 0));
     fix.mgr.run("/usr/bin/test_app");
+    fix.mgr.waitForCompletion();
+    fix.bus.drainQueue();
 
     CHECK(started);
     CHECK(finished);
@@ -78,8 +66,9 @@ TEST_CASE("Run emits RunOutputEvent for streamed output", "[build][run_manager]"
 
     fix.mgr.setBackend(std::make_unique<FakeRunBackend>(true, 0));
     fix.mgr.run("/usr/bin/test_app");
+    fix.mgr.waitForCompletion();
+    fix.bus.drainQueue();
 
-    // The FakeRunBackend emits output during launch and completion.
     CHECK(outputCount > 0);
 }
 
@@ -89,12 +78,9 @@ TEST_CASE("Kill during run transitions to Killed", "[build][run_manager]") {
     fix.mgr.setBackend(std::make_unique<FakeRunBackend>(true, 0));
     fix.mgr.run("/usr/bin/test_app");
 
-    // Note: the synchronous FakeRunBackend completes immediately,
-    // so the state might already be Finished by the time we call kill.
-    // This test verifies the kill path doesn't crash.
+    fix.mgr.waitForCompletion();
+
     fix.mgr.kill();
-    // After a synchronous run completes, kill transitions to Killed
-    // if still running, or is a no-op if already finished.
     CHECK((fix.mgr.currentState() == RunState::Finished ||
            fix.mgr.currentState() == RunState::Killed));
 }
@@ -104,6 +90,7 @@ TEST_CASE("Last result is populated after a run", "[build][run_manager]") {
 
     fix.mgr.setBackend(std::make_unique<FakeRunBackend>(true, 42));
     fix.mgr.run("/usr/bin/test_app");
+    fix.mgr.waitForCompletion();
 
     const auto& result = fix.mgr.lastResult();
     CHECK(result.success);
@@ -119,11 +106,10 @@ TEST_CASE("Launch parameters are passed to the backend", "[build][run_manager]")
 
     mgr.setBackend(std::move(fakeBackend));
     mgr.run("/usr/bin/ls", {"-la", "/tmp"}, "/home", {});
+    mgr.waitForCompletion();
 
     CHECK(backendPtr->lastExecutable() == "/usr/bin/ls");
     CHECK(backendPtr->lastArgs().size() == 2);
     CHECK(backendPtr->lastArgs()[0] == "-la");
     CHECK(backendPtr->lastArgs()[1] == "/tmp");
 }
-
-// End of run manager tests
