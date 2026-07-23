@@ -27,6 +27,8 @@ public:
 
     void setBuildDir(const std::string& dir);
     void setTarget(const std::string& target);
+    void setGenerator(const std::string& generator) { generator_ = generator; }
+    void setBuildType(const std::string& buildType) { buildType_ = buildType; }
 
 public:
     void appendLog(const std::string& line);
@@ -41,6 +43,8 @@ private:
     bool visible_ = false;
     std::string buildDir_;
     std::string target_;
+    std::string generator_ = "Ninja";
+    std::string buildType_ = "Debug";
     std::vector<std::string> logLines_;
     bool isBuilding_ = false;
 

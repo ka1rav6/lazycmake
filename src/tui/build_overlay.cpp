@@ -22,7 +22,6 @@ BuildOverlay::~BuildOverlay() {
 ftxui::Component BuildOverlay::build() {
     auto self = this;
 
-    // Subscribe to build events.
     buildProgressId_ = bus_.subscribe<events::BuildProgressEvent>(
         [self](const events::BuildProgressEvent& e) {
             self->appendLog("[progress] " + e.stage + ": " + e.detail);
@@ -92,11 +91,13 @@ ftxui::Component BuildOverlay::build() {
         if (e == ftxui::Event::Character('b') && !self->isBuilding_) {
             auto& mgr = self->buildManager_;
             if (!mgr.isRunning()) {
-                if (!self->buildDir_.empty() && !self->target_.empty()) {
-                    mgr.build(self->target_);
-                } else if (!self->buildDir_.empty()) {
-                    mgr.build();
+                if (mgr.currentStage() == build::BuildStage::Idle &&
+                    !self->buildDir_.empty()) {
+                    mgr.setConfigureParams(self->buildDir_, self->buildDir_ + "/build",
+                                           self->generator_, self->buildType_);
                 }
+                self->setBuilding(true);
+                mgr.build(self->target_);
             }
             return true;
         }
