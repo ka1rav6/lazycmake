@@ -1,0 +1,2048 @@
+Start testing: Jul 23 23:03 IST
+----------------------------------------------------------
+1/102 Testing: Project::findTarget locates an existing target
+1/102 Test: Project::findTarget locates an existing target
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Project::findTarget locates an existing target"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Project::findTarget locates an existing target" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Project::findTarget locates an existing target"
+Randomness seeded to: 3441638990
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Project::findTarget locates an existing target" end time: Jul 23 23:03 IST
+"Project::findTarget locates an existing target" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/102 Testing: Project::findTarget returns nullptr for an unknown name
+2/102 Test: Project::findTarget returns nullptr for an unknown name
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Project::findTarget returns nullptr for an unknown name"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Project::findTarget returns nullptr for an unknown name" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Project::findTarget returns nullptr for an unknown name"
+Randomness seeded to: 3001739929
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Project::findTarget returns nullptr for an unknown name" end time: Jul 23 23:03 IST
+"Project::findTarget returns nullptr for an unknown name" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/102 Testing: Project::hasTargetNamed reflects target presence
+3/102 Test: Project::hasTargetNamed reflects target presence
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Project::hasTargetNamed reflects target presence"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Project::hasTargetNamed reflects target presence" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Project::hasTargetNamed reflects target presence"
+Randomness seeded to: 225987427
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Project::hasTargetNamed reflects target presence" end time: Jul 23 23:03 IST
+"Project::hasTargetNamed reflects target presence" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/102 Testing: Project round-trips through JSON with all fields populated
+4/102 Test: Project round-trips through JSON with all fields populated
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Project round-trips through JSON with all fields populated"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Project round-trips through JSON with all fields populated" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Project round-trips through JSON with all fields populated"
+Randomness seeded to: 3779282166
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Project round-trips through JSON with all fields populated" end time: Jul 23 23:03 IST
+"Project round-trips through JSON with all fields populated" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/102 Testing: Project with no optional fields set round-trips correctly
+5/102 Test: Project with no optional fields set round-trips correctly
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Project with no optional fields set round-trips correctly"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Project with no optional fields set round-trips correctly" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Project with no optional fields set round-trips correctly"
+Randomness seeded to: 3979581280
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Project with no optional fields set round-trips correctly" end time: Jul 23 23:03 IST
+"Project with no optional fields set round-trips correctly" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/102 Testing: toString/fromString enum helpers round-trip for every enumerator
+6/102 Test: toString/fromString enum helpers round-trip for every enumerator
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "toString/fromString enum helpers round-trip for every enumerator"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"toString/fromString enum helpers round-trip for every enumerator" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "toString/fromString enum helpers round-trip for every enumerator"
+Randomness seeded to: 2607503679
+===============================================================================
+All tests passed (13 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"toString/fromString enum helpers round-trip for every enumerator" end time: Jul 23 23:03 IST
+"toString/fromString enum helpers round-trip for every enumerator" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/102 Testing: A valid single-target project has no issues
+7/102 Test: A valid single-target project has no issues
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "A valid single-target project has no issues"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"A valid single-target project has no issues" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "A valid single-target project has no issues"
+Randomness seeded to: 2937504922
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"A valid single-target project has no issues" end time: Jul 23 23:03 IST
+"A valid single-target project has no issues" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/102 Testing: Duplicate target names are flagged as an error
+8/102 Test: Duplicate target names are flagged as an error
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Duplicate target names are flagged as an error"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Duplicate target names are flagged as an error" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Duplicate target names are flagged as an error"
+Randomness seeded to: 2895153757
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Duplicate target names are flagged as an error" end time: Jul 23 23:03 IST
+"Duplicate target names are flagged as an error" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/102 Testing: A target linking against itself is rejected
+9/102 Test: A target linking against itself is rejected
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "A target linking against itself is rejected"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"A target linking against itself is rejected" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "A target linking against itself is rejected"
+Randomness seeded to: 175731036
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"A target linking against itself is rejected" end time: Jul 23 23:03 IST
+"A target linking against itself is rejected" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/102 Testing: Linking against an unknown name produces a warning, not an error
+10/102 Test: Linking against an unknown name produces a warning, not an error
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Linking against an unknown name produces a warning\, not an error"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Linking against an unknown name produces a warning, not an error" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Linking against an unknown name produces a warning\, not an error"
+Randomness seeded to: 3814789036
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Linking against an unknown name produces a warning, not an error" end time: Jul 23 23:03 IST
+"Linking against an unknown name produces a warning, not an error" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/102 Testing: Linking against an enabled dependency's link name is valid
+11/102 Test: Linking against an enabled dependency's link name is valid
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Linking against an enabled dependency's link name is valid"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Linking against an enabled dependency's link name is valid" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Linking against an enabled dependency's link name is valid"
+Randomness seeded to: 3209855714
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Linking against an enabled dependency's link name is valid" end time: Jul 23 23:03 IST
+"Linking against an enabled dependency's link name is valid" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/102 Testing: Linking against a disabled dependency's link name still warns
+12/102 Test: Linking against a disabled dependency's link name still warns
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Linking against a disabled dependency's link name still warns"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Linking against a disabled dependency's link name still warns" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Linking against a disabled dependency's link name still warns"
+Randomness seeded to: 3852560234
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Linking against a disabled dependency's link name still warns" end time: Jul 23 23:03 IST
+"Linking against a disabled dependency's link name still warns" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/102 Testing: A direct two-target link cycle is detected
+13/102 Test: A direct two-target link cycle is detected
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "A direct two-target link cycle is detected"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"A direct two-target link cycle is detected" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "A direct two-target link cycle is detected"
+Randomness seeded to: 781436960
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"A direct two-target link cycle is detected" end time: Jul 23 23:03 IST
+"A direct two-target link cycle is detected" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/102 Testing: A longer three-target link cycle is detected
+14/102 Test: A longer three-target link cycle is detected
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "A longer three-target link cycle is detected"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"A longer three-target link cycle is detected" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "A longer three-target link cycle is detected"
+Randomness seeded to: 2723233103
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"A longer three-target link cycle is detected" end time: Jul 23 23:03 IST
+"A longer three-target link cycle is detected" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/102 Testing: A valid diamond dependency graph produces no cycle error
+15/102 Test: A valid diamond dependency graph produces no cycle error
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "A valid diamond dependency graph produces no cycle error"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"A valid diamond dependency graph produces no cycle error" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "A valid diamond dependency graph produces no cycle error"
+Randomness seeded to: 1384695045
+===============================================================================
+test cases: 1 | 1 passed
+assertions: - none -
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"A valid diamond dependency graph produces no cycle error" end time: Jul 23 23:03 IST
+"A valid diamond dependency graph produces no cycle error" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/102 Testing: A target with no sources warns unless it is an interface library
+16/102 Test: A target with no sources warns unless it is an interface library
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "A target with no sources warns unless it is an interface library"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"A target with no sources warns unless it is an interface library" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "A target with no sources warns unless it is an interface library"
+Randomness seeded to: 3329828846
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"A target with no sources warns unless it is an interface library" end time: Jul 23 23:03 IST
+"A target with no sources warns unless it is an interface library" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/102 Testing: An interface library with no sources does not warn
+17/102 Test: An interface library with no sources does not warn
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "An interface library with no sources does not warn"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"An interface library with no sources does not warn" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "An interface library with no sources does not warn"
+Randomness seeded to: 3969558951
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"An interface library with no sources does not warn" end time: Jul 23 23:03 IST
+"An interface library with no sources does not warn" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/102 Testing: ProjectRepository::load fails with FileNotFound when no manifest exists
+18/102 Test: ProjectRepository::load fails with FileNotFound when no manifest exists
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "ProjectRepository::load fails with FileNotFound when no manifest exists"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"ProjectRepository::load fails with FileNotFound when no manifest exists" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "ProjectRepository::load fails with FileNotFound when no manifest exists"
+Randomness seeded to: 845796853
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"ProjectRepository::load fails with FileNotFound when no manifest exists" end time: Jul 23 23:03 IST
+"ProjectRepository::load fails with FileNotFound when no manifest exists" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/102 Testing: ProjectRepository::save then load round-trips a project
+19/102 Test: ProjectRepository::save then load round-trips a project
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "ProjectRepository::save then load round-trips a project"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"ProjectRepository::save then load round-trips a project" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "ProjectRepository::save then load round-trips a project"
+Randomness seeded to: 1087802919
+===============================================================================
+All tests passed (8 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"ProjectRepository::save then load round-trips a project" end time: Jul 23 23:03 IST
+"ProjectRepository::save then load round-trips a project" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/102 Testing: ProjectRepository::save writes the manifest at the expected relative path
+20/102 Test: ProjectRepository::save writes the manifest at the expected relative path
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "ProjectRepository::save writes the manifest at the expected relative path"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"ProjectRepository::save writes the manifest at the expected relative path" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "ProjectRepository::save writes the manifest at the expected relative path"
+Randomness seeded to: 813489797
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"ProjectRepository::save writes the manifest at the expected relative path" end time: Jul 23 23:03 IST
+"ProjectRepository::save writes the manifest at the expected relative path" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/102 Testing: ProjectRepository::load reports InvalidJson for a malformed manifest
+21/102 Test: ProjectRepository::load reports InvalidJson for a malformed manifest
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "ProjectRepository::load reports InvalidJson for a malformed manifest"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"ProjectRepository::load reports InvalidJson for a malformed manifest" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "ProjectRepository::load reports InvalidJson for a malformed manifest"
+Randomness seeded to: 2618270023
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"ProjectRepository::load reports InvalidJson for a malformed manifest" end time: Jul 23 23:03 IST
+"ProjectRepository::load reports InvalidJson for a malformed manifest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/102 Testing: ProjectRepository::load stamps rootDir to the actual load location
+22/102 Test: ProjectRepository::load stamps rootDir to the actual load location
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "ProjectRepository::load stamps rootDir to the actual load location"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"ProjectRepository::load stamps rootDir to the actual load location" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "ProjectRepository::load stamps rootDir to the actual load location"
+Randomness seeded to: 3791987134
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"ProjectRepository::load stamps rootDir to the actual load location" end time: Jul 23 23:03 IST
+"ProjectRepository::load stamps rootDir to the actual load location" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/102 Testing: Generator produces the expected files for a minimal project
+23/102 Test: Generator produces the expected files for a minimal project
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Generator produces the expected files for a minimal project"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Generator produces the expected files for a minimal project" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Generator produces the expected files for a minimal project"
+Randomness seeded to: 3598809514
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Generator produces the expected files for a minimal project" end time: Jul 23 23:03 IST
+"Generator produces the expected files for a minimal project" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/102 Testing: Root CMakeLists.txt has the correct structure
+24/102 Test: Root CMakeLists.txt has the correct structure
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Root CMakeLists.txt has the correct structure"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Root CMakeLists.txt has the correct structure" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Root CMakeLists.txt has the correct structure"
+Randomness seeded to: 1003518719
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Root CMakeLists.txt has the correct structure" end time: Jul 23 23:03 IST
+"Root CMakeLists.txt has the correct structure" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/102 Testing: Legacy global commands are never generated
+25/102 Test: Legacy global commands are never generated
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Legacy global commands are never generated"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Legacy global commands are never generated" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Legacy global commands are never generated"
+Randomness seeded to: 4241966265
+===============================================================================
+All tests passed (10 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Legacy global commands are never generated" end time: Jul 23 23:03 IST
+"Legacy global commands are never generated" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/102 Testing: Executable target produces correct add_executable
+26/102 Test: Executable target produces correct add_executable
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Executable target produces correct add_executable"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Executable target produces correct add_executable" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Executable target produces correct add_executable"
+Randomness seeded to: 422927431
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Executable target produces correct add_executable" end time: Jul 23 23:03 IST
+"Executable target produces correct add_executable" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/102 Testing: Generator produces cmake/dependencies.cmake when deps exist
+27/102 Test: Generator produces cmake/dependencies.cmake when deps exist
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Generator produces cmake/dependencies.cmake when deps exist"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Generator produces cmake/dependencies.cmake when deps exist" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Generator produces cmake/dependencies.cmake when deps exist"
+Randomness seeded to: 473424374
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Generator produces cmake/dependencies.cmake when deps exist" end time: Jul 23 23:03 IST
+"Generator produces cmake/dependencies.cmake when deps exist" time elapsed: 00:00:00
+----------------------------------------------------------
+
+28/102 Testing: Disabled dependencies are not included in generated files
+28/102 Test: Disabled dependencies are not included in generated files
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Disabled dependencies are not included in generated files"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Disabled dependencies are not included in generated files" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Disabled dependencies are not included in generated files"
+Randomness seeded to: 2079995915
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Disabled dependencies are not included in generated files" end time: Jul 23 23:03 IST
+"Disabled dependencies are not included in generated files" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/102 Testing: find_package dependencies produce correct CMake
+29/102 Test: find_package dependencies produce correct CMake
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "find_package dependencies produce correct CMake"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"find_package dependencies produce correct CMake" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "find_package dependencies produce correct CMake"
+Randomness seeded to: 113292599
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"find_package dependencies produce correct CMake" end time: Jul 23 23:03 IST
+"find_package dependencies produce correct CMake" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/102 Testing: target_link_libraries appears in target CMakeLists.txt
+30/102 Test: target_link_libraries appears in target CMakeLists.txt
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "target_link_libraries appears in target CMakeLists.txt"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"target_link_libraries appears in target CMakeLists.txt" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "target_link_libraries appears in target CMakeLists.txt"
+Randomness seeded to: 1573192191
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"target_link_libraries appears in target CMakeLists.txt" end time: Jul 23 23:03 IST
+"target_link_libraries appears in target CMakeLists.txt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/102 Testing: target_compile_features emits correct C++ standard
+31/102 Test: target_compile_features emits correct C++ standard
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "target_compile_features emits correct C++ standard"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"target_compile_features emits correct C++ standard" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "target_compile_features emits correct C++ standard"
+Randomness seeded to: 3550168000
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"target_compile_features emits correct C++ standard" end time: Jul 23 23:03 IST
+"target_compile_features emits correct C++ standard" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/102 Testing: Target with compile definitions emits them correctly
+32/102 Test: Target with compile definitions emits them correctly
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Target with compile definitions emits them correctly"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Target with compile definitions emits them correctly" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Target with compile definitions emits them correctly"
+Randomness seeded to: 3302922255
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Target with compile definitions emits them correctly" end time: Jul 23 23:03 IST
+"Target with compile definitions emits them correctly" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/102 Testing: Interface library target produces correct add_library
+33/102 Test: Interface library target produces correct add_library
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Interface library target produces correct add_library"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Interface library target produces correct add_library" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Interface library target produces correct add_library"
+Randomness seeded to: 269757371
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Interface library target produces correct add_library" end time: Jul 23 23:03 IST
+"Interface library target produces correct add_library" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/102 Testing: Multiple targets each get their own CMakeLists.txt
+34/102 Test: Multiple targets each get their own CMakeLists.txt
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Multiple targets each get their own CMakeLists.txt"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Multiple targets each get their own CMakeLists.txt" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Multiple targets each get their own CMakeLists.txt"
+Randomness seeded to: 1034456951
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Multiple targets each get their own CMakeLists.txt" end time: Jul 23 23:03 IST
+"Multiple targets each get their own CMakeLists.txt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/102 Testing: Static library target uses add_library with STATIC
+35/102 Test: Static library target uses add_library with STATIC
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Static library target uses add_library with STATIC"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Static library target uses add_library with STATIC" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Static library target uses add_library with STATIC"
+Randomness seeded to: 1560615826
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Static library target uses add_library with STATIC" end time: Jul 23 23:03 IST
+"Static library target uses add_library with STATIC" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/102 Testing: Shared library target uses add_library with SHARED
+36/102 Test: Shared library target uses add_library with SHARED
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Shared library target uses add_library with SHARED"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Shared library target uses add_library with SHARED" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Shared library target uses add_library with SHARED"
+Randomness seeded to: 4114172108
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Shared library target uses add_library with SHARED" end time: Jul 23 23:03 IST
+"Shared library target uses add_library with SHARED" time elapsed: 00:00:00
+----------------------------------------------------------
+
+37/102 Testing: Per-target cppStandard override is reflected in generated output
+37/102 Test: Per-target cppStandard override is reflected in generated output
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Per-target cppStandard override is reflected in generated output"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Per-target cppStandard override is reflected in generated output" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Per-target cppStandard override is reflected in generated output"
+Randomness seeded to: 3835373811
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Per-target cppStandard override is reflected in generated output" end time: Jul 23 23:03 IST
+"Per-target cppStandard override is reflected in generated output" time elapsed: 00:00:00
+----------------------------------------------------------
+
+38/102 Testing: Multiple dependencies with mixed sources all appear in the deps file
+38/102 Test: Multiple dependencies with mixed sources all appear in the deps file
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Multiple dependencies with mixed sources all appear in the deps file"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Multiple dependencies with mixed sources all appear in the deps file" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Multiple dependencies with mixed sources all appear in the deps file"
+Randomness seeded to: 3474028124
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Multiple dependencies with mixed sources all appear in the deps file" end time: Jul 23 23:03 IST
+"Multiple dependencies with mixed sources all appear in the deps file" time elapsed: 00:00:00
+----------------------------------------------------------
+
+39/102 Testing: GeneratedFileSet operations work correctly
+39/102 Test: GeneratedFileSet operations work correctly
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "GeneratedFileSet operations work correctly"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"GeneratedFileSet operations work correctly" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "GeneratedFileSet operations work correctly"
+Randomness seeded to: 3721206298
+===============================================================================
+All tests passed (11 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"GeneratedFileSet operations work correctly" end time: Jul 23 23:03 IST
+"GeneratedFileSet operations work correctly" time elapsed: 00:00:00
+----------------------------------------------------------
+
+40/102 Testing: Default settings have expected values
+40/102 Test: Default settings have expected values
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Default settings have expected values"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Default settings have expected values" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Default settings have expected values"
+Randomness seeded to: 1434030813
+===============================================================================
+All tests passed (11 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Default settings have expected values" end time: Jul 23 23:03 IST
+"Default settings have expected values" time elapsed: 00:00:00
+----------------------------------------------------------
+
+41/102 Testing: Settings can be overridden via JSON string
+41/102 Test: Settings can be overridden via JSON string
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Settings can be overridden via JSON string"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Settings can be overridden via JSON string" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Settings can be overridden via JSON string"
+Randomness seeded to: 1550806883
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Settings can be overridden via JSON string" end time: Jul 23 23:03 IST
+"Settings can be overridden via JSON string" time elapsed: 00:00:00
+----------------------------------------------------------
+
+42/102 Testing: Settings deep-merge works for nested objects
+42/102 Test: Settings deep-merge works for nested objects
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Settings deep-merge works for nested objects"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Settings deep-merge works for nested objects" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Settings deep-merge works for nested objects"
+Randomness seeded to: 2248408695
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Settings deep-merge works for nested objects" end time: Jul 23 23:03 IST
+"Settings deep-merge works for nested objects" time elapsed: 00:00:00
+----------------------------------------------------------
+
+43/102 Testing: Multiple layered overrides merge correctly
+43/102 Test: Multiple layered overrides merge correctly
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Multiple layered overrides merge correctly"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Multiple layered overrides merge correctly" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Multiple layered overrides merge correctly"
+Randomness seeded to: 3416252936
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Multiple layered overrides merge correctly" end time: Jul 23 23:03 IST
+"Multiple layered overrides merge correctly" time elapsed: 00:00:00
+----------------------------------------------------------
+
+44/102 Testing: Reset to defaults clears all overrides
+44/102 Test: Reset to defaults clears all overrides
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Reset to defaults clears all overrides"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Reset to defaults clears all overrides" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Reset to defaults clears all overrides"
+Randomness seeded to: 348607998
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Reset to defaults clears all overrides" end time: Jul 23 23:03 IST
+"Reset to defaults clears all overrides" time elapsed: 00:00:00
+----------------------------------------------------------
+
+45/102 Testing: Invalid JSON string returns false and does not change settings
+45/102 Test: Invalid JSON string returns false and does not change settings
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Invalid JSON string returns false and does not change settings"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Invalid JSON string returns false and does not change settings" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Invalid JSON string returns false and does not change settings"
+Randomness seeded to: 856835370
+[2026-07-23 23:03:40.032] [warning] SettingsManager: Failed to parse config string: [json.exception.parse_error.101] parse error at line 1, column 4: syntax error while parsing object key - invalid literal; last read: '{ th'; expected string literal
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Invalid JSON string returns false and does not change settings" end time: Jul 23 23:03 IST
+"Invalid JSON string returns false and does not change settings" time elapsed: 00:00:00
+----------------------------------------------------------
+
+46/102 Testing: Missing config files silently ignored
+46/102 Test: Missing config files silently ignored
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Missing config files silently ignored"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Missing config files silently ignored" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Missing config files silently ignored"
+Randomness seeded to: 879402213
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Missing config files silently ignored" end time: Jul 23 23:03 IST
+"Missing config files silently ignored" time elapsed: 00:00:00
+----------------------------------------------------------
+
+47/102 Testing: Default keymap has vim-like bindings
+47/102 Test: Default keymap has vim-like bindings
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Default keymap has vim-like bindings"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Default keymap has vim-like bindings" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Default keymap has vim-like bindings"
+Randomness seeded to: 3288494391
+===============================================================================
+All tests passed (11 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Default keymap has vim-like bindings" end time: Jul 23 23:03 IST
+"Default keymap has vim-like bindings" time elapsed: 00:00:00
+----------------------------------------------------------
+
+48/102 Testing: Unbound keys return empty action
+48/102 Test: Unbound keys return empty action
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Unbound keys return empty action"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Unbound keys return empty action" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Unbound keys return empty action"
+Randomness seeded to: 789601616
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Unbound keys return empty action" end time: Jul 23 23:03 IST
+"Unbound keys return empty action" time elapsed: 00:00:00
+----------------------------------------------------------
+
+49/102 Testing: Find key for action works in reverse
+49/102 Test: Find key for action works in reverse
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Find key for action works in reverse"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Find key for action works in reverse" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Find key for action works in reverse"
+Randomness seeded to: 2960293975
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Find key for action works in reverse" end time: Jul 23 23:03 IST
+"Find key for action works in reverse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+50/102 Testing: Loading keymap overrides from JSON works
+50/102 Test: Loading keymap overrides from JSON works
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Loading keymap overrides from JSON works"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Loading keymap overrides from JSON works" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Loading keymap overrides from JSON works"
+Randomness seeded to: 2120689276
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Loading keymap overrides from JSON works" end time: Jul 23 23:03 IST
+"Loading keymap overrides from JSON works" time elapsed: 00:00:00
+----------------------------------------------------------
+
+51/102 Testing: Build overlay has correct default bindings
+51/102 Test: Build overlay has correct default bindings
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Build overlay has correct default bindings"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Build overlay has correct default bindings" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Build overlay has correct default bindings"
+Randomness seeded to: 1335852579
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Build overlay has correct default bindings" end time: Jul 23 23:03 IST
+"Build overlay has correct default bindings" time elapsed: 00:00:00
+----------------------------------------------------------
+
+52/102 Testing: Wizard has navigation bindings
+52/102 Test: Wizard has navigation bindings
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Wizard has navigation bindings"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Wizard has navigation bindings" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Wizard has navigation bindings"
+Randomness seeded to: 1917926807
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Wizard has navigation bindings" end time: Jul 23 23:03 IST
+"Wizard has navigation bindings" time elapsed: 00:00:00
+----------------------------------------------------------
+
+53/102 Testing: Dialog bindings are set correctly
+53/102 Test: Dialog bindings are set correctly
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Dialog bindings are set correctly"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Dialog bindings are set correctly" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Dialog bindings are set correctly"
+Randomness seeded to: 1332284613
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Dialog bindings are set correctly" end time: Jul 23 23:03 IST
+"Dialog bindings are set correctly" time elapsed: 00:00:00
+----------------------------------------------------------
+
+54/102 Testing: Get all bindings for a context returns expected count
+54/102 Test: Get all bindings for a context returns expected count
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Get all bindings for a context returns expected count"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Get all bindings for a context returns expected count" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Get all bindings for a context returns expected count"
+Randomness seeded to: 2795516460
+===============================================================================
+All tests passed (14 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Get all bindings for a context returns expected count" end time: Jul 23 23:03 IST
+"Get all bindings for a context returns expected count" time elapsed: 00:00:00
+----------------------------------------------------------
+
+55/102 Testing: List all contexts includes all expected contexts
+55/102 Test: List all contexts includes all expected contexts
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "List all contexts includes all expected contexts"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"List all contexts includes all expected contexts" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "List all contexts includes all expected contexts"
+Randomness seeded to: 2899851046
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"List all contexts includes all expected contexts" end time: Jul 23 23:03 IST
+"List all contexts includes all expected contexts" time elapsed: 00:00:00
+----------------------------------------------------------
+
+56/102 Testing: Built-in dark theme is available and active by default
+56/102 Test: Built-in dark theme is available and active by default
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Built-in dark theme is available and active by default"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Built-in dark theme is available and active by default" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Built-in dark theme is available and active by default"
+Randomness seeded to: 2658920638
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Built-in dark theme is available and active by default" end time: Jul 23 23:03 IST
+"Built-in dark theme is available and active by default" time elapsed: 00:00:00
+----------------------------------------------------------
+
+57/102 Testing: Multiple built-in themes are available
+57/102 Test: Multiple built-in themes are available
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Multiple built-in themes are available"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Multiple built-in themes are available" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Multiple built-in themes are available"
+Randomness seeded to: 702701861
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Multiple built-in themes are available" end time: Jul 23 23:03 IST
+"Multiple built-in themes are available" time elapsed: 00:00:00
+----------------------------------------------------------
+
+58/102 Testing: Switching active theme works
+58/102 Test: Switching active theme works
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Switching active theme works"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Switching active theme works" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Switching active theme works"
+Randomness seeded to: 2878771061
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Switching active theme works" end time: Jul 23 23:03 IST
+"Switching active theme works" time elapsed: 00:00:00
+----------------------------------------------------------
+
+59/102 Testing: Switching to nonexistent theme returns false, keeps current
+59/102 Test: Switching to nonexistent theme returns false, keeps current
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Switching to nonexistent theme returns false\, keeps current"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Switching to nonexistent theme returns false, keeps current" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Switching to nonexistent theme returns false\, keeps current"
+Randomness seeded to: 2879130678
+[2026-07-23 23:03:40.067] [warning] ThemeManager: Theme 'totally_fake_theme' not found
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Switching to nonexistent theme returns false, keeps current" end time: Jul 23 23:03 IST
+"Switching to nonexistent theme returns false, keeps current" time elapsed: 00:00:00
+----------------------------------------------------------
+
+60/102 Testing: Find theme by name returns correct theme
+60/102 Test: Find theme by name returns correct theme
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Find theme by name returns correct theme"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Find theme by name returns correct theme" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Find theme by name returns correct theme"
+Randomness seeded to: 3452856791
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Find theme by name returns correct theme" end time: Jul 23 23:03 IST
+"Find theme by name returns correct theme" time elapsed: 00:00:00
+----------------------------------------------------------
+
+61/102 Testing: Loading a theme from JSON string works
+61/102 Test: Loading a theme from JSON string works
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Loading a theme from JSON string works"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Loading a theme from JSON string works" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Loading a theme from JSON string works"
+Randomness seeded to: 2481409900
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Loading a theme from JSON string works" end time: Jul 23 23:03 IST
+"Loading a theme from JSON string works" time elapsed: 00:00:00
+----------------------------------------------------------
+
+62/102 Testing: Reset to defaults restores built-in themes
+62/102 Test: Reset to defaults restores built-in themes
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Reset to defaults restores built-in themes"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Reset to defaults restores built-in themes" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Reset to defaults restores built-in themes"
+Randomness seeded to: 3119442360
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Reset to defaults restores built-in themes" end time: Jul 23 23:03 IST
+"Reset to defaults restores built-in themes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+63/102 Testing: Built-in console_app template is available
+63/102 Test: Built-in console_app template is available
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Built-in console_app template is available"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Built-in console_app template is available" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Built-in console_app template is available"
+Randomness seeded to: 2537382695
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Built-in console_app template is available" end time: Jul 23 23:03 IST
+"Built-in console_app template is available" time elapsed: 00:00:00
+----------------------------------------------------------
+
+64/102 Testing: All built-in templates are listed
+64/102 Test: All built-in templates are listed
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "All built-in templates are listed"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"All built-in templates are listed" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "All built-in templates are listed"
+Randomness seeded to: 4128006938
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"All built-in templates are listed" end time: Jul 23 23:03 IST
+"All built-in templates are listed" time elapsed: 00:00:00
+----------------------------------------------------------
+
+65/102 Testing: Template rendering substitutes placeholders
+65/102 Test: Template rendering substitutes placeholders
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Template rendering substitutes placeholders"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Template rendering substitutes placeholders" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Template rendering substitutes placeholders"
+Randomness seeded to: 3714018456
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Template rendering substitutes placeholders" end time: Jul 23 23:03 IST
+"Template rendering substitutes placeholders" time elapsed: 00:00:00
+----------------------------------------------------------
+
+66/102 Testing: Static library template renders namespace correctly
+66/102 Test: Static library template renders namespace correctly
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Static library template renders namespace correctly"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Static library template renders namespace correctly" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Static library template renders namespace correctly"
+Randomness seeded to: 2465544757
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Static library template renders namespace correctly" end time: Jul 23 23:03 IST
+"Static library template renders namespace correctly" time elapsed: 00:00:00
+----------------------------------------------------------
+
+67/102 Testing: Rendering nonexistent template returns nullopt
+67/102 Test: Rendering nonexistent template returns nullopt
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Rendering nonexistent template returns nullopt"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Rendering nonexistent template returns nullopt" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Rendering nonexistent template returns nullopt"
+Randomness seeded to: 2722784428
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Rendering nonexistent template returns nullopt" end time: Jul 23 23:03 IST
+"Rendering nonexistent template returns nullopt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+68/102 Testing: Registering a custom template works
+68/102 Test: Registering a custom template works
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Registering a custom template works"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Registering a custom template works" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Registering a custom template works"
+Randomness seeded to: 1781643783
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Registering a custom template works" end time: Jul 23 23:03 IST
+"Registering a custom template works" time elapsed: 00:00:00
+----------------------------------------------------------
+
+69/102 Testing: Reset to defaults removes custom templates
+69/102 Test: Reset to defaults removes custom templates
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Reset to defaults removes custom templates"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Reset to defaults removes custom templates" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Reset to defaults removes custom templates"
+Randomness seeded to: 2103727583
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Reset to defaults removes custom templates" end time: Jul 23 23:03 IST
+"Reset to defaults removes custom templates" time elapsed: 00:00:00
+----------------------------------------------------------
+
+70/102 Testing: Header-only library template is available
+70/102 Test: Header-only library template is available
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Header-only library template is available"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Header-only library template is available" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Header-only library template is available"
+Randomness seeded to: 3814493821
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Header-only library template is available" end time: Jul 23 23:03 IST
+"Header-only library template is available" time elapsed: 00:00:00
+----------------------------------------------------------
+
+71/102 Testing: C console app template has correct language
+71/102 Test: C console app template has correct language
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "C console app template has correct language"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"C console app template has correct language" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "C console app template has correct language"
+Randomness seeded to: 2183854863
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"C console app template has correct language" end time: Jul 23 23:03 IST
+"C console app template has correct language" time elapsed: 00:00:00
+----------------------------------------------------------
+
+72/102 Testing: Subscribe and publish a single event type
+72/102 Test: Subscribe and publish a single event type
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Subscribe and publish a single event type"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Subscribe and publish a single event type" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Subscribe and publish a single event type"
+Randomness seeded to: 2232834014
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Subscribe and publish a single event type" end time: Jul 23 23:03 IST
+"Subscribe and publish a single event type" time elapsed: 00:00:00
+----------------------------------------------------------
+
+73/102 Testing: Only matching event types trigger their handlers
+73/102 Test: Only matching event types trigger their handlers
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Only matching event types trigger their handlers"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Only matching event types trigger their handlers" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Only matching event types trigger their handlers"
+Randomness seeded to: 1984594503
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Only matching event types trigger their handlers" end time: Jul 23 23:03 IST
+"Only matching event types trigger their handlers" time elapsed: 00:00:00
+----------------------------------------------------------
+
+74/102 Testing: Multiple subscribers for the same event all receive it
+74/102 Test: Multiple subscribers for the same event all receive it
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Multiple subscribers for the same event all receive it"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Multiple subscribers for the same event all receive it" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Multiple subscribers for the same event all receive it"
+Randomness seeded to: 3284428110
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Multiple subscribers for the same event all receive it" end time: Jul 23 23:03 IST
+"Multiple subscribers for the same event all receive it" time elapsed: 00:00:00
+----------------------------------------------------------
+
+75/102 Testing: Unsubscribe removes the handler permanently
+75/102 Test: Unsubscribe removes the handler permanently
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Unsubscribe removes the handler permanently"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Unsubscribe removes the handler permanently" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Unsubscribe removes the handler permanently"
+Randomness seeded to: 1235933236
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Unsubscribe removes the handler permanently" end time: Jul 23 23:03 IST
+"Unsubscribe removes the handler permanently" time elapsed: 00:00:00
+----------------------------------------------------------
+
+76/102 Testing: Thread-safe queue delivers events on drain
+76/102 Test: Thread-safe queue delivers events on drain
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Thread-safe queue delivers events on drain"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Thread-safe queue delivers events on drain" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Thread-safe queue delivers events on drain"
+Randomness seeded to: 1917138690
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Thread-safe queue delivers events on drain" end time: Jul 23 23:03 IST
+"Thread-safe queue delivers events on drain" time elapsed: 00:00:00
+----------------------------------------------------------
+
+77/102 Testing: EventBus clear removes all handlers and queued events
+77/102 Test: EventBus clear removes all handlers and queued events
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "EventBus clear removes all handlers and queued events"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"EventBus clear removes all handlers and queued events" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "EventBus clear removes all handlers and queued events"
+Randomness seeded to: 2870098935
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"EventBus clear removes all handlers and queued events" end time: Jul 23 23:03 IST
+"EventBus clear removes all handlers and queued events" time elapsed: 00:00:00
+----------------------------------------------------------
+
+78/102 Testing: PluginEventBus allows subscribe but not publish
+78/102 Test: PluginEventBus allows subscribe but not publish
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "PluginEventBus allows subscribe but not publish"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"PluginEventBus allows subscribe but not publish" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "PluginEventBus allows subscribe but not publish"
+Randomness seeded to: 2840996916
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"PluginEventBus allows subscribe but not publish" end time: Jul 23 23:03 IST
+"PluginEventBus allows subscribe but not publish" time elapsed: 00:00:00
+----------------------------------------------------------
+
+79/102 Testing: Different event types carry their specific data
+79/102 Test: Different event types carry their specific data
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Different event types carry their specific data"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Different event types carry their specific data" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Different event types carry their specific data"
+Randomness seeded to: 3816609823
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Different event types carry their specific data" end time: Jul 23 23:03 IST
+"Different event types carry their specific data" time elapsed: 00:00:00
+----------------------------------------------------------
+
+80/102 Testing: DrainQueue is safe to call with no pending events
+80/102 Test: DrainQueue is safe to call with no pending events
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "DrainQueue is safe to call with no pending events"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"DrainQueue is safe to call with no pending events" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "DrainQueue is safe to call with no pending events"
+Randomness seeded to: 3855992931
+===============================================================================
+test cases: 1 | 1 passed
+assertions: - none -
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"DrainQueue is safe to call with no pending events" end time: Jul 23 23:03 IST
+"DrainQueue is safe to call with no pending events" time elapsed: 00:00:00
+----------------------------------------------------------
+
+81/102 Testing: Handler exceptions are caught and don't crash the bus
+81/102 Test: Handler exceptions are caught and don't crash the bus
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Handler exceptions are caught and don't crash the bus"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Handler exceptions are caught and don't crash the bus" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Handler exceptions are caught and don't crash the bus"
+Randomness seeded to: 3563990268
+[2026-07-23 23:03:40.123] [warning] EventBus: Handler 1 threw: handler error
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Handler exceptions are caught and don't crash the bus" end time: Jul 23 23:03 IST
+"Handler exceptions are caught and don't crash the bus" time elapsed: 00:00:00
+----------------------------------------------------------
+
+82/102 Testing: BuildManager starts in Idle state
+82/102 Test: BuildManager starts in Idle state
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "BuildManager starts in Idle state"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"BuildManager starts in Idle state" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "BuildManager starts in Idle state"
+Randomness seeded to: 3428584030
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"BuildManager starts in Idle state" end time: Jul 23 23:03 IST
+"BuildManager starts in Idle state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+83/102 Testing: Successful configure transitions through states
+83/102 Test: Successful configure transitions through states
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Successful configure transitions through states"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Successful configure transitions through states" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Successful configure transitions through states"
+Randomness seeded to: 3328798557
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Successful configure transitions through states" end time: Jul 23 23:03 IST
+"Successful configure transitions through states" time elapsed: 00:00:00
+----------------------------------------------------------
+
+84/102 Testing: Failed configure transitions to Failed
+84/102 Test: Failed configure transitions to Failed
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Failed configure transitions to Failed"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Failed configure transitions to Failed" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Failed configure transitions to Failed"
+Randomness seeded to: 1658199678
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Failed configure transitions to Failed" end time: Jul 23 23:03 IST
+"Failed configure transitions to Failed" time elapsed: 00:00:00
+----------------------------------------------------------
+
+85/102 Testing: Successful build transitions to Succeeded
+85/102 Test: Successful build transitions to Succeeded
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Successful build transitions to Succeeded"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Successful build transitions to Succeeded" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Successful build transitions to Succeeded"
+Randomness seeded to: 425525570
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Successful build transitions to Succeeded" end time: Jul 23 23:03 IST
+"Successful build transitions to Succeeded" time elapsed: 00:00:00
+----------------------------------------------------------
+
+86/102 Testing: Failed build transitions to Failed
+86/102 Test: Failed build transitions to Failed
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Failed build transitions to Failed"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Failed build transitions to Failed" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Failed build transitions to Failed"
+Randomness seeded to: 560084817
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Failed build transitions to Failed" end time: Jul 23 23:03 IST
+"Failed build transitions to Failed" time elapsed: 00:00:00
+----------------------------------------------------------
+
+87/102 Testing: Configure emits progress events on the bus
+87/102 Test: Configure emits progress events on the bus
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Configure emits progress events on the bus"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Configure emits progress events on the bus" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Configure emits progress events on the bus"
+Randomness seeded to: 3820475928
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Configure emits progress events on the bus" end time: Jul 23 23:03 IST
+"Configure emits progress events on the bus" time elapsed: 00:00:00
+----------------------------------------------------------
+
+88/102 Testing: Successful build emits BuildFinishedEvent with success=true
+88/102 Test: Successful build emits BuildFinishedEvent with success=true
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Successful build emits BuildFinishedEvent with success=true"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Successful build emits BuildFinishedEvent with success=true" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Successful build emits BuildFinishedEvent with success=true"
+Randomness seeded to: 2638944293
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Successful build emits BuildFinishedEvent with success=true" end time: Jul 23 23:03 IST
+"Successful build emits BuildFinishedEvent with success=true" time elapsed: 00:00:00
+----------------------------------------------------------
+
+89/102 Testing: Failed build emits BuildFinishedEvent with success=false
+89/102 Test: Failed build emits BuildFinishedEvent with success=false
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Failed build emits BuildFinishedEvent with success=false"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Failed build emits BuildFinishedEvent with success=false" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Failed build emits BuildFinishedEvent with success=false"
+Randomness seeded to: 1477242836
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Failed build emits BuildFinishedEvent with success=false" end time: Jul 23 23:03 IST
+"Failed build emits BuildFinishedEvent with success=false" time elapsed: 00:00:00
+----------------------------------------------------------
+
+90/102 Testing: Cancel is no-op on completed build
+90/102 Test: Cancel is no-op on completed build
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Cancel is no-op on completed build"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Cancel is no-op on completed build" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Cancel is no-op on completed build"
+Randomness seeded to: 3867962812
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Cancel is no-op on completed build" end time: Jul 23 23:03 IST
+"Cancel is no-op on completed build" time elapsed: 00:00:00
+----------------------------------------------------------
+
+91/102 Testing: Cancel when running transitions to Idle
+91/102 Test: Cancel when running transitions to Idle
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Cancel when running transitions to Idle"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Cancel when running transitions to Idle" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Cancel when running transitions to Idle"
+Randomness seeded to: 825445070
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Cancel when running transitions to Idle" end time: Jul 23 23:03 IST
+"Cancel when running transitions to Idle" time elapsed: 00:00:00
+----------------------------------------------------------
+
+92/102 Testing: Last result is populated after a build
+92/102 Test: Last result is populated after a build
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Last result is populated after a build"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Last result is populated after a build" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Last result is populated after a build"
+Randomness seeded to: 864344445
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Last result is populated after a build" end time: Jul 23 23:03 IST
+"Last result is populated after a build" time elapsed: 00:00:00
+----------------------------------------------------------
+
+93/102 Testing: Last result shows failure after a failed build
+93/102 Test: Last result shows failure after a failed build
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Last result shows failure after a failed build"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Last result shows failure after a failed build" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Last result shows failure after a failed build"
+Randomness seeded to: 1221944431
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Last result shows failure after a failed build" end time: Jul 23 23:03 IST
+"Last result shows failure after a failed build" time elapsed: 00:00:00
+----------------------------------------------------------
+
+94/102 Testing: Reset clears last result and returns to Idle
+94/102 Test: Reset clears last result and returns to Idle
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Reset clears last result and returns to Idle"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Reset clears last result and returns to Idle" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Reset clears last result and returns to Idle"
+Randomness seeded to: 165786499
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Reset clears last result and returns to Idle" end time: Jul 23 23:03 IST
+"Reset clears last result and returns to Idle" time elapsed: 00:00:00
+----------------------------------------------------------
+
+95/102 Testing: RunManager starts in Idle state
+95/102 Test: RunManager starts in Idle state
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "RunManager starts in Idle state"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"RunManager starts in Idle state" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "RunManager starts in Idle state"
+Randomness seeded to: 1235294709
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"RunManager starts in Idle state" end time: Jul 23 23:03 IST
+"RunManager starts in Idle state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+96/102 Testing: Successful run transitions to Finished
+96/102 Test: Successful run transitions to Finished
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Successful run transitions to Finished"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Successful run transitions to Finished" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Successful run transitions to Finished"
+Randomness seeded to: 875172341
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Successful run transitions to Finished" end time: Jul 23 23:03 IST
+"Successful run transitions to Finished" time elapsed: 00:00:00
+----------------------------------------------------------
+
+97/102 Testing: Failed run captures the error
+97/102 Test: Failed run captures the error
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Failed run captures the error"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Failed run captures the error" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Failed run captures the error"
+Randomness seeded to: 2136383528
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Failed run captures the error" end time: Jul 23 23:03 IST
+"Failed run captures the error" time elapsed: 00:00:00
+----------------------------------------------------------
+
+98/102 Testing: Run emits RunStartedEvent and RunFinishedEvent
+98/102 Test: Run emits RunStartedEvent and RunFinishedEvent
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Run emits RunStartedEvent and RunFinishedEvent"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Run emits RunStartedEvent and RunFinishedEvent" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Run emits RunStartedEvent and RunFinishedEvent"
+Randomness seeded to: 3344992450
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Run emits RunStartedEvent and RunFinishedEvent" end time: Jul 23 23:03 IST
+"Run emits RunStartedEvent and RunFinishedEvent" time elapsed: 00:00:00
+----------------------------------------------------------
+
+99/102 Testing: Run emits RunOutputEvent for streamed output
+99/102 Test: Run emits RunOutputEvent for streamed output
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Run emits RunOutputEvent for streamed output"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Run emits RunOutputEvent for streamed output" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Run emits RunOutputEvent for streamed output"
+Randomness seeded to: 2218594471
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Run emits RunOutputEvent for streamed output" end time: Jul 23 23:03 IST
+"Run emits RunOutputEvent for streamed output" time elapsed: 00:00:00
+----------------------------------------------------------
+
+100/102 Testing: Kill during run transitions to Killed
+100/102 Test: Kill during run transitions to Killed
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Kill during run transitions to Killed"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Kill during run transitions to Killed" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Kill during run transitions to Killed"
+Randomness seeded to: 2911353202
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Kill during run transitions to Killed" end time: Jul 23 23:03 IST
+"Kill during run transitions to Killed" time elapsed: 00:00:00
+----------------------------------------------------------
+
+101/102 Testing: Last result is populated after a run
+101/102 Test: Last result is populated after a run
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Last result is populated after a run"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Last result is populated after a run" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Last result is populated after a run"
+Randomness seeded to: 846993314
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Last result is populated after a run" end time: Jul 23 23:03 IST
+"Last result is populated after a run" time elapsed: 00:00:00
+----------------------------------------------------------
+
+102/102 Testing: Launch parameters are passed to the backend
+102/102 Test: Launch parameters are passed to the backend
+Command: "/home/kairav/dev/lazycmake/build/tests/lazycmake_core_tests" "Launch parameters are passed to the backend"
+Directory: /home/kairav/dev/lazycmake/build/tests
+"Launch parameters are passed to the backend" start time: Jul 23 23:03 IST
+Output:
+----------------------------------------------------------
+Filters: "Launch parameters are passed to the backend"
+Randomness seeded to: 3271710682
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Launch parameters are passed to the backend" end time: Jul 23 23:03 IST
+"Launch parameters are passed to the backend" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jul 23 23:03 IST

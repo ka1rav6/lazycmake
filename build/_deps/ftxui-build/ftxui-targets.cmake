@@ -72,25 +72,25 @@ set_target_properties(ftxui::component PROPERTIES
   INTERFACE_LINK_LIBRARIES "ftxui::dom;Threads::Threads"
 )
 
-# Import target "ftxui::screen" for configuration "Release"
-set_property(TARGET ftxui::screen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+# Import target "ftxui::screen" for configuration "Debug"
+set_property(TARGET ftxui::screen APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(ftxui::screen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "/home/kairav/dev/lazycmake/build/_deps/ftxui-build/libftxui-screen.a"
+  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
+  IMPORTED_LOCATION_DEBUG "/home/kairav/dev/lazycmake/build/_deps/ftxui-build/libftxui-screen.a"
   )
 
-# Import target "ftxui::dom" for configuration "Release"
-set_property(TARGET ftxui::dom APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+# Import target "ftxui::dom" for configuration "Debug"
+set_property(TARGET ftxui::dom APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(ftxui::dom PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "/home/kairav/dev/lazycmake/build/_deps/ftxui-build/libftxui-dom.a"
+  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
+  IMPORTED_LOCATION_DEBUG "/home/kairav/dev/lazycmake/build/_deps/ftxui-build/libftxui-dom.a"
   )
 
-# Import target "ftxui::component" for configuration "Release"
-set_property(TARGET ftxui::component APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+# Import target "ftxui::component" for configuration "Debug"
+set_property(TARGET ftxui::component APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(ftxui::component PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "/home/kairav/dev/lazycmake/build/_deps/ftxui-build/libftxui-component.a"
+  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
+  IMPORTED_LOCATION_DEBUG "/home/kairav/dev/lazycmake/build/_deps/ftxui-build/libftxui-component.a"
   )
 
 # This file does not depend on other imported targets which have
