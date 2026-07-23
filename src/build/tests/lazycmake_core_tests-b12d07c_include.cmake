@@ -1,0 +1,5 @@
+if(EXISTS "/home/kairav/dev/lazycmake/src/build/tests/lazycmake_core_tests-b12d07c_tests.cmake")
+  include("/home/kairav/dev/lazycmake/src/build/tests/lazycmake_core_tests-b12d07c_tests.cmake")
+else()
+  add_test(lazycmake_core_tests_NOT_BUILT-b12d07c lazycmake_core_tests_NOT_BUILT-b12d07c)
+endif()
