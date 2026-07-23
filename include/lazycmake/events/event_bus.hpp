@@ -235,6 +235,16 @@ private:
 
     // Dispatch a single event to all matching subscribers.
     void dispatch(const Event& event);
+
+    // Callback invoked after each publishThreadSafe() to wake the UI.
+    // Set by Application to post a custom event to the FTXUI screen.
+    std::function<void()> onEventQueued_;
+
+public:
+    // Set a callback that is invoked (on the calling thread) after every
+    // publishThreadSafe() call. Used to wake the FTXUI event loop so it
+    // drains the queue and repaints.
+    void setOnEventQueued(std::function<void()> cb) { onEventQueued_ = std::move(cb); }
 };
 
 // ==========================================================================

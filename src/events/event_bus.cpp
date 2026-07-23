@@ -18,8 +18,13 @@ void EventBus::publish(const Event& event) {
 }
 
 void EventBus::publishThreadSafe(const Event& event) {
-    std::lock_guard<std::mutex> lock(queueMutex_);
-    threadSafeQueue_.push(event);
+    {
+        std::lock_guard<std::mutex> lock(queueMutex_);
+        threadSafeQueue_.push(event);
+    }
+    if (onEventQueued_) {
+        onEventQueued_();
+    }
 }
 
 void EventBus::drainQueue() {
