@@ -19,7 +19,8 @@ struct Screen {
     virtual void onLeave() {}
 };
 
-// Manages a stack of screens for navigation (Startup -> Wizard -> MainWorkspace).
+// TODO: dead code — ScreenStack is unused. Application uses its own
+// screenState_ member directly instead. Either wire it in or remove it.
 class ScreenStack {
 public:
     void push(std::unique_ptr<Screen> screen);
