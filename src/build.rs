@@ -278,7 +278,7 @@ impl BuildManager {
         let cancel = self.cancel_requested.clone();
         let sd = source_dir.to_string();
         let bd = build_dir.to_string();
-        let gen = generator.to_string();
+        let gen_name = generator.to_string();
         let bt = build_type.to_string();
 
         let join = thread::spawn(move || {

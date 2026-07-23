@@ -178,7 +178,7 @@ impl RunManager {
     }
 
     pub fn set_backend(&self, backend: Box<dyn IRunBackend>) {
-        self.cancel();
+        self.kill();
         *self.backend.lock().unwrap() = backend;
     }
 
@@ -226,6 +226,7 @@ impl RunManager {
                 target_name: exe.clone(),
                 executable_path: exe.clone(),
             }));
+            let bus_clone = Arc::clone(&bus);
             let mut bk = backend.lock().unwrap();
             let launched = bk.launch(
                 &exe,
@@ -233,7 +234,7 @@ impl RunManager {
                 &wd,
                 &env,
                 Box::new(move |stream: &str, line: &str| {
-                    bus.publish_thread_safe(Event::RunOutput(RunOutputEvent {
+                    bus_clone.publish_thread_safe(Event::RunOutput(RunOutputEvent {
                         stream: stream.to_string(),
                         line: line.to_string(),
                     }));

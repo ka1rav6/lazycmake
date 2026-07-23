@@ -79,7 +79,7 @@ pub enum Event {
     PluginError(PluginErrorEvent),
 }
 
-type HandlerFn = Box<dyn Fn(&Event) + Send + 'static>;
+type HandlerFn = Box<dyn Fn(&Event) + Send + Sync + 'static>;
 
 struct Handler {
     id: HandlerId,
@@ -88,8 +88,8 @@ struct Handler {
 }
 
 pub struct EventBus {
-    handlers: Vec<Handler>,
-    next_id: HandlerId,
+    handlers: Mutex<Vec<Handler>>,
+    next_id: Mutex<HandlerId>,
     queue: Mutex<VecDeque<Event>>,
     on_event_queued: Mutex<Option<Box<dyn Fn() + Send>>>,
 }
@@ -97,20 +97,22 @@ pub struct EventBus {
 impl EventBus {
     pub fn new() -> Self {
         Self {
-            handlers: Vec::new(),
-            next_id: 1,
+            handlers: Mutex::new(Vec::new()),
+            next_id: Mutex::new(1),
             queue: Mutex::new(VecDeque::new()),
             on_event_queued: Mutex::new(None),
         }
     }
 
-    pub fn subscribe<F>(&mut self, event_type: &'static str, f: F) -> HandlerId
+    pub fn subscribe<F>(&self, event_type: &'static str, f: F) -> HandlerId
     where
-        F: Fn(&Event) + Send + 'static,
+        F: Fn(&Event) + Send + Sync + 'static,
     {
-        let id = self.next_id;
-        self.next_id += 1;
-        self.handlers.push(Handler {
+        let mut next = self.next_id.lock().unwrap();
+        let id = *next;
+        *next += 1;
+        let mut handlers = self.handlers.lock().unwrap();
+        handlers.push(Handler {
             id,
             event_type,
             func: Box::new(f),
@@ -118,13 +120,15 @@ impl EventBus {
         id
     }
 
-    pub fn unsubscribe(&mut self, id: HandlerId) {
-        self.handlers.retain(|h| h.id != id);
+    pub fn unsubscribe(&self, id: HandlerId) {
+        let mut handlers = self.handlers.lock().unwrap();
+        handlers.retain(|h| h.id != id);
     }
 
     pub fn publish(&self, event: &Event) {
         let type_name = event.type_name();
-        for handler in &self.handlers {
+        let handlers = self.handlers.lock().unwrap();
+        for handler in handlers.iter() {
             if handler.event_type == type_name {
                 (handler.func)(event);
             }
@@ -144,7 +148,7 @@ impl EventBus {
     }
 
     pub fn drain_queue(&self) {
-        let mut local: VecDeque<Event> = {
+        let mut local = {
             let mut queue = self.queue.lock().unwrap();
             std::mem::take(&mut *queue)
         };
@@ -165,8 +169,8 @@ impl EventBus {
         *cb = Some(Box::new(f));
     }
 
-    pub fn clear(&mut self) {
-        self.handlers.clear();
+    pub fn clear(&self) {
+        self.handlers.lock().unwrap().clear();
         self.queue.lock().unwrap().clear();
     }
 }
